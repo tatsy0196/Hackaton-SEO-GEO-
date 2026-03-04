@@ -55,7 +55,7 @@
       </div>
       <div class="carousel-dots">
         <button 
-          v-for="(slide, index) in 4" 
+          v-for="(index) in 4"
           :key="index"
           @click="currentSlide = index"
           :class="['dot', { active: currentSlide === index }]"

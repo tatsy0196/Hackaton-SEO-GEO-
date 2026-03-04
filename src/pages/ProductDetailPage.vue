@@ -128,10 +128,10 @@ onMounted(async () => {
           <button
             v-for="(image, index) in product.images"
             :key="index"
-            @click="selectImage(index)"
+            @click="selectImage(index as number)"
             :class="['thumbnail', { active: selectedImage === index }]"
           >
-            <img :src="image" :alt="`${product.name} - image ${index + 1}`" />
+            <img :src="image" :alt="`${product.name} - image ${index as number + 1}`" />
           </button>
         </div>
       </div>
