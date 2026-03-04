@@ -27,33 +27,67 @@ const props = defineProps<{
 
 <style scoped>
 .card {
-  border-radius: 10px;
-  border: 1px solid #eee;
-  padding: 0.75rem;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  padding: 0;
   background: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
 img {
   width: 100%;
-  border-radius: 8px;
-  margin-bottom: 0.5rem;
+  height: 220px;
   object-fit: cover;
+  margin-bottom: 0;
 }
+
+.card h3 {
+  font-size: 1.1rem;
+  margin: 0.75rem 1rem 0.5rem;
+  color: #2c3e50;
+  line-height: 1.3;
+}
+
 .price {
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 700;
   color: #1b5e20;
+  margin: 0 1rem 0.5rem;
 }
+
 .desc {
   font-size: 0.9rem;
-  color: #555;
+  color: #666;
+  margin: 0 1rem;
+  line-height: 1.5;
+  flex-grow: 1;
 }
+
 .link {
-  display: inline-block;
-  margin-top: 0.4rem;
-  font-size: 0.9rem;
-  color: #1b5e20;
+  display: block;
+  margin: 1rem;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  color: white;
+  background: #1b5e20;
   text-decoration: none;
+  text-align: center;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+  font-weight: 600;
 }
+
 .link:hover {
-  text-decoration: underline;
+  background: #145214;
+  text-decoration: none;
 }
 </style>

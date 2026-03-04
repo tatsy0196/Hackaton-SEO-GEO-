@@ -9,7 +9,7 @@ const products = ref<any[]>([])
 
 onMounted(async () => {
   arrondissement.value = route.params.arrondissement as string
-  products.value = await getProductsByArrondissement(arrondissement.value)
+  products.value = await getProductsByArrondissement()
 })
 </script>
 
