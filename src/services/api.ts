@@ -4,11 +4,11 @@ const vendors = [
         id: 'v1',
         slug: 'ferme-des-batignolles',
         name: 'Ferme des Batignolles',
-        shortDescription: 'Maraîcher bio livrant des paniers de saison sur Paris.',
-        seoDescription: 'Producteur local bio proposant des paniers de légumes de saison en circuit court à Paris.',
+        shortDescription: 'Maraîcher bio livrant des paniers de saison sur Grenoble.',
+        seoDescription: 'Producteur local bio proposant des paniers de légumes de saison en circuit court à Grenoble.',
         address: '12 rue des Moines',
         postalCode: '75017',
-        city: 'Paris',
+        city: 'Grenoble',
         labels: ['Bio', 'Circuit court'],
         imageUrl: 'https://ametzalde.fr/wp-content/uploads/2022/10/ferme-ametzalde-bio-pays-basque.jpg',
         products: []
@@ -20,7 +20,7 @@ const vendors = [
         shortDescription: 'Épicerie en vrac et zéro déchet dans le 11ème.',
         address: '45 rue Oberkampf',
         postalCode: '75011',
-        city: 'Paris',
+        city: 'Grenoble',
         labels: ['Zéro déchet', 'Vrac'],
         imageUrl: 'https://www.seinemaritime.fr/images/large/0809-sia-philippe-savale-la-ferme-du-vieux-puits03.webp',
         products: []
@@ -30,12 +30,12 @@ const vendors = [
 const products = [
     {
         id: 'p1',
-        slug: 'panier-legumes-bio-paris',
+        slug: 'panier-legumes-bio-Grenoble',
         name: 'Panier de légumes bio de saison',
         price: 24.9,
         vendorId: 'v1',
         category: 'Fruits et légumes',
-        city: 'Paris',
+        city: 'Grenoble',
         shortDescription: 'Un panier surprise de légumes bio de saison pour 2 à 3 personnes.',
         imageUrl: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=500&h=350&fit=crop',
         images: [
@@ -60,7 +60,7 @@ const products = [
         price: 8.5,
         vendorId: 'v2',
         category: 'Épicerie',
-        city: 'Paris',
+        city: 'Grenoble',
         shortDescription: 'Avoine, riz complet, quinoa bio en vrac.',
         imageUrl: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&h=350&fit=crop',
         images: [
@@ -83,7 +83,7 @@ const products = [
         price: 4.2,
         vendorId: 'v2',
         category: 'Boulangerie',
-        city: 'Paris',
+        city: 'Grenoble',
         shortDescription: 'Pain au levain naturel, farine bio française.',
         imageUrl: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=500&h=350&fit=crop',
         images: [
@@ -106,7 +106,7 @@ const products = [
         price: 6.8,
         vendorId: 'v1',
         category: 'Produits laitiers',
-        city: 'Paris',
+        city: 'Grenoble',
         shortDescription: 'Fromage de chèvre frais, production locale.',
         imageUrl: 'https://images.unsplash.com/photo-1452195100486-9cc805987862?w=500&h=350&fit=crop',
         images: [
@@ -130,7 +130,7 @@ const products = [
         price: 2.9,
         vendorId: 'v1',
         category: 'Fruits et légumes',
-        city: 'Paris',
+        city: 'Grenoble',
         shortDescription: 'Botte de carottes fraîches bio avec fanes, environ 500g.',
         imageUrl: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=500&h=350&fit=crop',
         images: [
@@ -158,7 +158,7 @@ export const getProductBySlug = async (slug: string) =>
     products.find(p => p.slug === slug) ?? null
 
 export const getProductsByArrondissement = async () =>
-    products.filter(p => p.city === 'Paris') // Simule un filtre par arrondissement
+    products.filter(p => p.city === 'Grenoble') // Simule un filtre par arrondissement
 
 // Récupérer le vendeur d'un produit
 export const getVendorForProduct = async (vendorId: string) =>

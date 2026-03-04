@@ -16,7 +16,7 @@ const routes = [
     { path: '/produits/:slug', name: 'product-detail', component: ProductDetailPage },
     { path: '/vendeurs', name: 'vendors', component: VendorsListPage },
     { path: '/vendeurs/:slug', name: 'vendor-detail', component: VendorDetailPage },
-    { path: '/paris/:arrondissement/produits-locaux', name: 'local-area', component: LocalAreaPage },
+    { path: '/Grenoble/:arrondissement/produits-locaux', name: 'local-area', component: LocalAreaPage },
     { path: '/guide/:slug', name: 'content', component: ContentPage },
     { path: '/faq', name: 'faq', component: FaqPage },
     { path: '/checkout', name: 'checkout', component: CheckoutPage }

@@ -13,15 +13,15 @@ onMounted(async () => {
   products.value = await getProductsByArrondissement()
 
   useHead({
-    title: `Produits locaux à Paris ${arrondissement.value} - GreenNoble`,
+    title: `Produits locaux à Grenoble ${arrondissement.value} - GreenNoble`,
     meta: [
       {
         name: 'description',
-        content: `Découvrez les produits écoresponsables disponibles dans le ${arrondissement.value}ᵉ arrondissement de Paris.`
+        content: `Découvrez les produits écoresponsables disponibles dans le ${arrondissement.value}ᵉ arrondissement de Grenoble.`
       },
       {
         name: 'keywords',
-        content: `Paris ${arrondissement.value}, produits locaux, bio, écoresponsable, arrondissement`
+        content: `Grenoble ${arrondissement.value}, produits locaux, bio, écoresponsable, arrondissement`
       }
     ]
   })
@@ -30,7 +30,7 @@ onMounted(async () => {
 
 <template>
   <section class="page">
-    <h1>Produits locaux à Paris {{ arrondissement }}</h1>
+    <h1>Produits locaux à Grenoble {{ arrondissement }}</h1>
     <p>Produits écoresponsables disponibles près de chez vous dans le {{ arrondissement }}ᵉ.</p>
 
     <div v-if="products.length" class="grid">

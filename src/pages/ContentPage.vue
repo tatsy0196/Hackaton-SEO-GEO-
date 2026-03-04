@@ -12,11 +12,11 @@ onMounted(() => {
     meta: [
       {
         name: 'description',
-        content: `Contenu SEO pour le guide "${slug}". Partie du cluster sémantique marketplace locale écoresponsable Paris.`
+        content: `Contenu SEO pour le guide "${slug}". Partie du cluster sémantique marketplace locale écoresponsable Grenoble.`
       },
       {
         name: 'keywords',
-        content: `${slug}, guide, marketplace locale, Paris, écoresponsable`
+        content: `${slug}, guide, marketplace locale, Grenoble, écoresponsable`
       }
     ]
   })
@@ -28,7 +28,7 @@ onMounted(() => {
     <h1>Guide : {{ slug }}</h1>
     <article class="content">
       <p>Contenu SEO pour le guide "{{ slug }}".</p>
-      <p>Cette page fait partie du cluster sémantique "marketplace locale écoresponsable Paris".</p>
+      <p>Cette page fait partie du cluster sémantique "marketplace locale écoresponsable Grenoble".</p>
       <p>Optimisée pour les moteurs IA avec structure claire et entités bien définies.</p>
     </article>
   </section>

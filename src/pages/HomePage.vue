@@ -1,7 +1,7 @@
 <template>
   <section class="hero">
     <div class="hero-inner">
-      <h1>Votre marketplace locale écoresponsable à Paris</h1>
+      <h1>Votre marketplace locale écoresponsable à Grenoble</h1>
       <p>
         Découvrez des producteurs et commerces engagés, commandez en ligne
         et choisissez un mode de retrait bas carbone.
@@ -140,17 +140,17 @@
         <div class="testimonial">
           <div class="stars">⭐⭐⭐⭐⭐</div>
           <p class="quote">"Des produits frais et de qualité, livrés rapidement. Je recommande vivement GreenNoble pour faire mes courses locales !"</p>
-          <p class="author">— Marie L., Paris 11ème</p>
+          <p class="author">— Marie L., Grenoble 11ème</p>
         </div>
         <div class="testimonial">
           <div class="stars">⭐⭐⭐⭐⭐</div>
           <p class="quote">"Enfin une vraie alternative aux supermarchés ! J'adore soutenir les producteurs locaux tout en mangeant bio."</p>
-          <p class="author">— Thomas R., Paris 17ème</p>
+          <p class="author">— Thomas R., Grenoble 17ème</p>
         </div>
         <div class="testimonial">
           <div class="stars">⭐⭐⭐⭐⭐</div>
           <p class="quote">"La livraison à vélo est un vrai plus. Je peux faire mes courses en respectant mes valeurs écologiques."</p>
-          <p class="author">— Sophie M., Paris 20ème</p>
+          <p class="author">— Sophie M., Grenoble 20ème</p>
         </div>
       </div>
     </div>
@@ -191,15 +191,15 @@ onMounted(async () => {
   vendors.value = await getVendors()
 
   useHead({
-    title: 'GreenNoble - Marketplace locale écoresponsable à Paris',
+    title: 'GreenNoble - Marketplace locale écoresponsable à Grenoble',
     meta: [
       {
         name: 'description',
-        content: 'Découvrez des producteurs et commerces locaux engagés à Paris. Commandez des produits bio, artisanaux et de saison en ligne.'
+        content: 'Découvrez des producteurs et commerces locaux engagés à Grenoble. Commandez des produits bio, artisanaux et de saison en ligne.'
       },
       {
         name: 'keywords',
-        content: 'marketplace locale, produits bio, Paris, écoresponsable, producteurs locaux'
+        content: 'marketplace locale, produits bio, Grenoble, écoresponsable, producteurs locaux'
       }
     ]
   })

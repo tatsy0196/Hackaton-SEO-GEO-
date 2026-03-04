@@ -12,7 +12,7 @@ onMounted(() => {
       },
       {
         name: 'keywords',
-        content: 'commande, checkout, panier, achat, Paris'
+        content: 'commande, checkout, panier, achat, Grenoble'
       }
     ]
   })

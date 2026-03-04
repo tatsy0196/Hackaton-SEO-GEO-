@@ -26,7 +26,7 @@ onMounted(async () => {
   <section class="vendors-hero">
     <div class="hero-content">
       <h1>Producteurs & Commerces Écoresponsables</h1>
-      <p>Découvrez nos partenaires engagés pour un Paris plus durable</p>
+      <p>Découvrez nos partenaires engagés pour un Grenoble plus durable</p>
       <div class="stats">
         <div class="stat">
           <span class="number">{{ vendors.length }}</span>

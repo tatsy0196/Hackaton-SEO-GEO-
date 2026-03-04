@@ -14,11 +14,11 @@ onMounted(async () => {
     meta: [
       {
         name: 'description',
-        content: 'Découvrez notre sélection de produits bio, artisanaux et de saison provenant de producteurs locaux à Paris.'
+        content: 'Découvrez notre sélection de produits bio, artisanaux et de saison provenant de producteurs locaux à Grenoble.'
       },
       {
         name: 'keywords',
-        content: 'produits bio, produits locaux, artisanaux, Paris, écoresponsable'
+        content: 'produits bio, produits locaux, artisanaux, Grenoble, écoresponsable'
       }
     ]
   })

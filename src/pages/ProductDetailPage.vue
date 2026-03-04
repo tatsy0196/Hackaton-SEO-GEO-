@@ -80,7 +80,7 @@ onMounted(async () => {
         },
         {
           name: 'keywords',
-          content: `${product.value.name}, ${product.value.category}, produits bio, Paris`
+          content: `${product.value.name}, ${product.value.category}, produits bio, Grenoble`
         }
       ]
     })

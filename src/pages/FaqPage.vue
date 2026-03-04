@@ -8,11 +8,11 @@ onMounted(() => {
     meta: [
       {
         name: 'description',
-        content: 'Trouvez les réponses à vos questions sur GreenNoble, marketplace locale écoresponsable à Paris.'
+        content: 'Trouvez les réponses à vos questions sur GreenNoble, marketplace locale écoresponsable à Grenoble.'
       },
       {
         name: 'keywords',
-        content: 'FAQ, questions, marketplace locale, Paris, écoresponsable'
+        content: 'FAQ, questions, marketplace locale, Grenoble, écoresponsable'
       }
     ]
   })
@@ -21,17 +21,17 @@ onMounted(() => {
 
 <template>
   <section class="page">
-    <h1>FAQ – Acheter local et écoresponsable à Paris</h1>
+    <h1>FAQ – Acheter local et écoresponsable à Grenoble</h1>
 
     <div class="faq">
       <details>
         <summary>Qu'est-ce que GreenNoble ?</summary>
-        <p>Une marketplace qui met en relation les consommateurs parisiens avec des producteurs et commerces locaux écoresponsables.</p>
+        <p>Une marketplace qui met en relation les consommateurs Grenobleiens avec des producteurs et commerces locaux écoresponsables.</p>
       </details>
 
       <details>
         <summary>Comment fonctionne la livraison ?</summary>
-        <p>Click & collect, points relais, ou livraison vélo dans Paris et petite couronne.</p>
+        <p>Click & collect, points relais, ou livraison vélo dans Grenoble et petite couronne.</p>
       </details>
 
       <details>

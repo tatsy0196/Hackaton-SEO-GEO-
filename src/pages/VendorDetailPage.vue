@@ -124,7 +124,7 @@ onMounted(async () => {
 
           <div class="sidebar-card eco-card">
             <h3>Écoresponsable 🌱</h3>
-            <p>Ce producteur s'engage pour un Paris plus durable avec des pratiques respectueuses de l'environnement.</p>
+            <p>Ce producteur s'engage pour un Grenoble plus durable avec des pratiques respectueuses de l'environnement.</p>
           </div>
         </aside>
       </div>
