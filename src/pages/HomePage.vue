@@ -1,7 +1,7 @@
 <template>
   <section class="hero">
     <div class="hero-inner">
-      <h1>Votre marketplace locale écoresponsable à Grenoble</h1>
+      <h1>GreenNoble Votre marketplace locale écoresponsable à Grenoble</h1>
       <p>
         Découvrez des producteurs et commerces engagés, commandez en ligne
         et choisissez un mode de retrait bas carbone.

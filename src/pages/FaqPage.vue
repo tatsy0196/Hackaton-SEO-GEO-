@@ -26,7 +26,7 @@ onMounted(() => {
     <div class="faq">
       <details>
         <summary>Qu'est-ce que GreenNoble ?</summary>
-        <p>Une marketplace qui met en relation les consommateurs Grenobleiens avec des producteurs et commerces locaux écoresponsables.</p>
+        <p>Une marketplace qui met en relation les consommateurs Grenoblois avec des producteurs et commerces locaux écoresponsables.</p>
       </details>
 
       <details>
@@ -53,6 +53,9 @@ onMounted(() => {
   margin: 0 auto;
   padding: 1.5rem;
 }
+.page h1 {
+  color: #333;
+}
 .faq details {
   border: 1px solid #eee;
   border-radius: 8px;
@@ -63,8 +66,12 @@ summary {
   cursor: pointer;
   font-weight: 600;
   padding: 0.75rem;
+  color: #667eea;
 }
 details[open] summary {
   border-bottom: 1px solid #eee;
+}
+details p {
+  color: #1a1a1a;
 }
 </style>
