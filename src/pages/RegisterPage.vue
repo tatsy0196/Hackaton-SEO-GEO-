@@ -243,8 +243,23 @@ const handleRegister = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?q=80&w=2074');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 2rem;
+  position: relative;
+}
+
+.register-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 0;
 }
 
 .register-container {
@@ -252,10 +267,12 @@ const handleRegister = async () => {
   grid-template-columns: 1.2fr 1fr;
   max-width: 1100px;
   width: 100%;
-  background: white;
+  background: transparent;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .register-card {
@@ -265,6 +282,7 @@ const handleRegister = async () => {
   justify-content: center;
   overflow-y: auto;
   max-height: 90vh;
+  background: white;
 }
 
 .register-header {
@@ -275,7 +293,7 @@ const handleRegister = async () => {
 .logo-circle {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -365,13 +383,13 @@ const handleRegister = async () => {
 .input-wrapper input:focus,
 .form-group input:focus {
   outline: none;
-  border-color: #f093fb;
-  box-shadow: 0 0 0 3px rgba(240, 147, 251, 0.1);
+  border-color: #2E7D32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
 }
 
 .btn-submit {
   margin-top: 0.5rem;
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   color: white;
   padding: 0.875rem;
   border: none;
@@ -384,7 +402,7 @@ const handleRegister = async () => {
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(240, 147, 251, 0.3);
+  box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
 }
 
 .btn-submit:disabled {
@@ -420,19 +438,20 @@ const handleRegister = async () => {
 }
 
 .link-login {
-  color: #f5576c;
+  color: #43A047;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .link-login:hover {
-  color: #f093fb;
+  color: #2E7D32;
   text-decoration: underline;
 }
 
 .register-visual {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: transparent;
+  backdrop-filter: blur(10px);
   padding: 3rem 2.5rem;
   display: flex;
   align-items: center;
@@ -444,18 +463,19 @@ const handleRegister = async () => {
 .register-visual::before {
   content: '';
   position: absolute;
-  width: 350px;
-  height: 350px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  bottom: -100px;
-  left: -100px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(46, 125, 50, 0.25);
+  z-index: 0;
 }
 
 .visual-content {
   position: relative;
   z-index: 1;
   color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .stats-grid {
@@ -466,29 +486,32 @@ const handleRegister = async () => {
 }
 
 .stat-card {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   padding: 1.25rem;
   border-radius: 12px;
   text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .stat-number {
   font-size: 1.75rem;
   font-weight: 800;
   margin-bottom: 0.25rem;
+  color: white;
 }
 
 .stat-label {
   font-size: 0.8rem;
-  opacity: 0.9;
+  opacity: 0.95;
+  color: white;
 }
 
 .benefits h3 {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+  color: white;
 }
 
 .benefits ul {
@@ -504,11 +527,16 @@ const handleRegister = async () => {
   align-items: center;
   gap: 0.75rem;
   font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.875rem 1.25rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  color: white;
 }
 
 .benefits li svg {
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
   padding: 0.4rem;
   border-radius: 50%;
 }
@@ -531,3 +559,4 @@ const handleRegister = async () => {
   }
 }
 </style>
+

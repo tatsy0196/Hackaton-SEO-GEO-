@@ -88,11 +88,11 @@ onMounted(() => {
 }
 
 .logo svg {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .logo:hover {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .nav {
@@ -112,11 +112,11 @@ onMounted(() => {
 }
 
 .nav-link:hover {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .nav-link.router-link-active {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .nav-link.router-link-active::after {
@@ -126,7 +126,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   height: 3px;
-  background: #667eea;
+  background: #2E7D32;
   border-radius: 3px;
 }
 
@@ -151,7 +151,7 @@ onMounted(() => {
 
 .icon-btn:hover {
   background: #f7fafc;
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .cart-btn .badge {
@@ -172,7 +172,7 @@ onMounted(() => {
 }
 
 .btn-login {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   color: white;
   padding: 0.625rem 1.5rem;
   border-radius: 10px;
@@ -209,3 +209,4 @@ onMounted(() => {
   }
 }
 </style>
+

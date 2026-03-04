@@ -175,18 +175,18 @@ const displayPrice = props.product.discountPrice || props.product.price
   justify-content: center;
   padding: 0.75rem;
   font-size: 0.95rem;
-  color: #667eea;
+  color: #2E7D32;
   background: transparent;
   text-decoration: none;
   text-align: center;
   border-radius: 10px;
-  border: 2px solid #667eea;
+  border: 2px solid #2E7D32;
   transition: all 0.3s ease;
   font-weight: 600;
 }
 
 .btn-view:hover {
-  background: #667eea;
+  background: #2E7D32;
   color: white;
 }
 
@@ -198,7 +198,7 @@ const displayPrice = props.product.discountPrice || props.product.price
   padding: 0.75rem;
   font-size: 0.95rem;
   color: white;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   border: none;
   text-align: center;
   border-radius: 10px;
@@ -222,3 +222,4 @@ const displayPrice = props.product.discountPrice || props.product.price
   50% { transform: scale(1.05); }
 }
 </style>
+

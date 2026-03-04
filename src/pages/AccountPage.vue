@@ -607,7 +607,7 @@ const formatDate = (dateString: string) => {
 }
 
 .toggle input:checked + .toggle-slider {
-  background-color: #667eea;
+  background-color: #2E7D32;
 }
 
 .toggle input:checked + .toggle-slider::before {
