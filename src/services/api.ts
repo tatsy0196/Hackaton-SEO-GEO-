@@ -2,6 +2,8 @@
 const vendors = [
     {
         id: 'v1',
+        bioCertification: "acquis",
+        bioCertifDate:  new Date(2024,6,22) ,
         slug: 'ferme-des-batignolles',
         name: 'Ferme des Batignolles',
         shortDescription: 'Maraîcher bio livrant des paniers de saison sur Grenoble.',
@@ -15,6 +17,8 @@ const vendors = [
     },
     {
         id: 'v2',
+        bioCertification: "acquis",
+        bioCertifDate:  new Date(2022,8,16) ,
         slug: 'epicerie-vrac-du-centre',
         name: 'Épicerie Vrac du centre',
         shortDescription: 'Épicerie en vrac et zéro déchet en pleins coeur de Grenoble.',

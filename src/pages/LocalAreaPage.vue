@@ -31,7 +31,7 @@ onMounted(async () => {
 <template>
   <section class="page">
     <h1>Produits locaux à Grenoble {{ arrondissement }}</h1>
-    <p>Produits écoresponsables disponibles près de chez vous dans le {{ arrondissement }}ᵉ.</p>
+    <p>Produits écoresponsables disponibles près de chez vous.</p>
 
     <div v-if="products.length" class="grid">
       <div v-for="product in products" :key="product.id" class="card">

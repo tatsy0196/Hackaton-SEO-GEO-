@@ -106,12 +106,20 @@ onMounted(async () => {
             <h3>À propos</h3>
             <div class="about-stats">
               <div class="stat">
+                <span class="stat-label">Certification Bio</span>
+                <span class="stat-value">{{ vendor?.bioCertification || "incertain" }}</span>
+              </div>
+              <div v-if="vendor.bioCertification" class="stat">
+                <span class="stat-label">Date de certification</span>
+                <span class="stat-value">{{ vendor?.bioCertifDate?.toLocaleDateString() || "incertain" }}</span>
+              </div>
+              <div class="stat">
                 <span class="stat-value">{{ vendor.labels?.length || 0 }}</span>
                 <span class="stat-label">Engagements</span>
               </div>
               <div class="stat">
-                <span class="stat-value">{{ vendor.city }}</span>
                 <span class="stat-label">Localisation</span>
+                <span class="stat-value">{{ vendor.city }}</span>
               </div>
             </div>
           </div>
