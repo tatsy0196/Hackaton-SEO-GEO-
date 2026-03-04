@@ -10,7 +10,7 @@ const vendors = [
         postalCode: '75017',
         city: 'Paris',
         labels: ['Bio', 'Circuit court'],
-        imageUrl: 'https://via.placeholder.com/400x260/90ee90/ffffff?text=Batignolles',
+        imageUrl: 'https://ametzalde.fr/wp-content/uploads/2022/10/ferme-ametzalde-bio-pays-basque.jpg',
         products: []
     },
     {
@@ -22,7 +22,7 @@ const vendors = [
         postalCode: '75011',
         city: 'Paris',
         labels: ['Zéro déchet', 'Vrac'],
-        imageUrl: 'https://via.placeholder.com/400x260/a8e6cf/ffffff?text=Vrac+11',
+        imageUrl: 'https://www.seinemaritime.fr/images/large/0809-sia-philippe-savale-la-ferme-du-vieux-puits03.webp',
         products: []
     }
 ]
