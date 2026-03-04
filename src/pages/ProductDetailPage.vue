@@ -4,6 +4,7 @@ import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getProductBySlug, getProducts, getVendorForProduct} from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
+import { useCart } from '../services/cart'
 
 const route = useRoute()
 const product = ref<any | null>(null)
@@ -11,8 +12,10 @@ const vendor = ref<any | null>(null)
 const selectedImage = ref(0)
 const quantity = ref(1)
 const activeTab = ref('description')
-const isAddedToCart = ref(false)
 const relatedProducts = ref<any[]>([])
+
+const { addToCart: addToCartService, isInCart } = useCart()
+const showAdded = ref(false)
 
 const selectImage = (index: number) => {
   selectedImage.value = index
@@ -23,7 +26,11 @@ const selectTab = (tab: string) => {
 }
 
 const addToCart = () => {
-  isAddedToCart.value = true
+  if (!product.value.stock) return
+  
+  addToCartService(product.value, quantity.value)
+  showAdded.value = true
+  
   trackEvent('add_to_cart', {
     product_id: product.value.id,
     quantity: quantity.value,
@@ -31,10 +38,8 @@ const addToCart = () => {
   })
   
   setTimeout(() => {
-    isAddedToCart.value = false
+    showAdded.value = false
   }, 2000)
-  
-  alert(`${quantity.value} x ${product.value.name} ajouté(s) au panier`)
 }
 
 const discountPercentage = computed(() => {
@@ -253,8 +258,8 @@ onMounted(async () => {
           </div>
 
           <div class="actions">
-            <button @click="addToCart" class="add-cart" :class="{ added: isAddedToCart }" :disabled="!product.stock">
-              <svg v-if="!isAddedToCart" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button @click="addToCart" class="add-cart" :class="{ added: showAdded }" :disabled="!product.stock">
+              <svg v-if="!showAdded" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="9" cy="21" r="1"></circle>
                 <circle cx="20" cy="21" r="1"></circle>
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -263,7 +268,7 @@ onMounted(async () => {
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
               </svg>
-              <span>{{ isAddedToCart ? 'Ajouté !' : (product.stock ? 'Ajouter au panier' : 'Rupture de stock') }}</span>
+              <span>{{ showAdded ? 'Ajouté !' : (product.stock ? 'Ajouter au panier' : 'Rupture de stock') }}</span>
             </button>
             <button class="wishlist-btn">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

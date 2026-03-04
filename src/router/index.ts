@@ -8,6 +8,10 @@ import CheckoutPage from "../pages/CheckoutPage.vue";
 import ProductDetailPage from "../pages/ProductDetailPage.vue";
 import VendorsListPage from "../pages/VendorsListPage.vue";
 import VendorDetailPage from "../pages/VendorDetailPage.vue";
+import LoginPage from "../pages/LoginPage.vue";
+import RegisterPage from "../pages/RegisterPage.vue";
+import CartPage from "../pages/CartPage.vue";
+import AccountPage from "../pages/AccountPage.vue";
 
 
 const routes = [
@@ -19,7 +23,11 @@ const routes = [
     { path: '/Grenoble/:arrondissement/produits-locaux', name: 'local-area', component: LocalAreaPage },
     { path: '/guide/:slug', name: 'content', component: ContentPage },
     { path: '/faq', name: 'faq', component: FaqPage },
-    { path: '/checkout', name: 'checkout', component: CheckoutPage }
+    { path: '/checkout', name: 'checkout', component: CheckoutPage },
+    { path: '/connexion', name: 'login', component: LoginPage },
+    { path: '/inscription', name: 'register', component: RegisterPage },
+    { path: '/panier', name: 'cart', component: CartPage },
+    { path: '/compte', name: 'account', component: AccountPage }
 ]
 
 const router = createRouter({
