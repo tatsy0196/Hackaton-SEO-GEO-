@@ -1,4 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
+
+onMounted(() => {
+  useHead({
+    title: 'Commande - Checkout - GreenNoble',
+    meta: [
+      {
+        name: 'description',
+        content: 'Finalisez votre commande sur GreenNoble. Choisissez votre mode de retrait : click & collect ou point relais.'
+      },
+      {
+        name: 'keywords',
+        content: 'commande, checkout, panier, achat, Paris'
+      }
+    ]
+  })
+})
+</script>
 
 <template>
   <section class="page">

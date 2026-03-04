@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, computed } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getProductBySlug, getProducts, getVendorForProduct} from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
@@ -69,6 +70,20 @@ onMounted(async () => {
     relatedProducts.value = allProducts
       .filter(p => p.id !== product.value.id && p.category === product.value.category)
       .slice(0, 3)
+
+    useHead({
+      title: `${product.value.name} - GreenNoble`,
+      meta: [
+        {
+          name: 'description',
+          content: product.value.shortDescription || `Découvrez ${product.value.name} sur GreenNoble marketplace locale`
+        },
+        {
+          name: 'keywords',
+          content: `${product.value.name}, ${product.value.category}, produits bio, Paris`
+        }
+      ]
+    })
   }
 })
 </script>

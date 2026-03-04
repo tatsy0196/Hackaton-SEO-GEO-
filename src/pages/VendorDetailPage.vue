@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getVendorBySlug, getProductsByVendor} from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
@@ -20,6 +21,20 @@ onMounted(async () => {
     
     // Charger les produits du vendeur
     vendorProducts.value = await getProductsByVendor(vendor.value.id)
+
+    useHead({
+      title: `${vendor.value.name} - Producteur local écoresponsable - GreenNoble`,
+      meta: [
+        {
+          name: 'description',
+          content: vendor.value.shortDescription || `Découvrez ${vendor.value.name}, producteur local écoresponsable à ${vendor.value.city}`
+        },
+        {
+          name: 'keywords',
+          content: `${vendor.value.name}, producteur local, ${vendor.value.city}, écoresponsable, bio`
+        }
+      ]
+    })
   }
 })
 </script>

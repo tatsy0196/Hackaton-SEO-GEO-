@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import ProductCard from "../components/products/ProductCard.vue";
 import {getProducts} from "../services/api.ts";
 
@@ -7,6 +8,20 @@ const products = ref<any[]>([])
 
 onMounted(async () => {
   products.value = await getProducts()
+
+  useHead({
+    title: 'Produits locaux écoresponsables - GreenNoble',
+    meta: [
+      {
+        name: 'description',
+        content: 'Découvrez notre sélection de produits bio, artisanaux et de saison provenant de producteurs locaux à Paris.'
+      },
+      {
+        name: 'keywords',
+        content: 'produits bio, produits locaux, artisanaux, Paris, écoresponsable'
+      }
+    ]
+  })
 })
 </script>
 

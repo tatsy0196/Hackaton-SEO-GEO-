@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { RouterLink } from 'vue-router'
 import {getVendors} from "../services/api.ts";
 
@@ -7,6 +8,16 @@ const vendors = ref<any[]>([])
 
 onMounted(async () => {
   vendors.value = await getVendors()
+
+  useHead({
+    title: "Liste des vendeurs de notre communauté - GreenNoble",
+    meta: [
+      {
+        name: 'description',
+        content: "Cette page regroupe l'ensemble des vendeurs de notre magnifique communauté écoresponsable"
+      }
+    ]
+  })
 })
 </script>
 
