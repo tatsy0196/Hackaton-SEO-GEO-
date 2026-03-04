@@ -543,5 +543,5 @@ export const getProducts = async () => products
 export const getProductBySlug = async (slug: string) =>
     products.find(p => p.slug === slug) ?? null
 
-export const getProductsByArrondissement = async (arrondissement: string) =>
+export const getProductsByArrondissement = async () =>
     products.filter(p => p.city === 'Paris') // Simule un filtre par arrondissement
