@@ -127,6 +127,7 @@ button:focus-visible {
 main {
   flex: 1;
   width: 100%;
+  padding-top: 0;
 }
 
 /* Header Styles */
@@ -137,6 +138,7 @@ main {
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .header-inner {
