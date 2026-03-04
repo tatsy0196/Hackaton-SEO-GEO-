@@ -7,7 +7,7 @@ import {getProducts} from "./src/services/api.ts"
 import {getVendors} from "./src/services/api.ts"
 
 
-export default defineConfig({
+export default defineConfig(async () => ({
     base: '/',
     plugins: [
         vue(),
@@ -26,15 +26,10 @@ export default defineConfig({
         // Plugin pour générer le sitemap
         ViteSitemap({
             hostname: 'https://GreeNoble.com', // ton domaine
-            routes: async () => {
-                const products = await getProducts()
-                const vendors = await getVendors()
-
-                const productRoutes = products.map(p => `/produit/${p.slug}`)
-                const vendorRoutes = vendors.map(v => `/vendeur/${v.slug}`)
-
-                return [...productRoutes, ...vendorRoutes]
-            }
+            dynamicRoutes: [
+                ...(await getProducts()).map(p => `/produit/${p.slug}`),
+                ...(await getVendors()).map(v => `/vendeur/${v.slug}`)
+            ]
         })
     ],
-})
+}))
