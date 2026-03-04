@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute } from 'vue-router'
 import {getVendorBySlug} from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
@@ -15,6 +16,20 @@ onMounted(async () => {
     trackEvent('view_vendor', {
       vendor_id: vendor.value.id,
       city: vendor.value.city
+    })
+
+    useHead({
+      title: `${vendor.value.name} - Producteur local écoresponsable - GreenNoble`,
+      meta: [
+        {
+          name: 'description',
+          content: vendor.value.shortDescription || `Découvrez ${vendor.value.name}, producteur local écoresponsable à ${vendor.value.city}`
+        },
+        {
+          name: 'keywords',
+          content: `${vendor.value.name}, producteur local, ${vendor.value.city}, écoresponsable, bio`
+        }
+      ]
     })
   }
 })

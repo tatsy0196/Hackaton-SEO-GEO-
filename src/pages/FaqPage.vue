@@ -1,4 +1,23 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
+
+onMounted(() => {
+  useHead({
+    title: 'FAQ - Questions fréquemment posées - GreenNoble',
+    meta: [
+      {
+        name: 'description',
+        content: 'Trouvez les réponses à vos questions sur GreenNoble, marketplace locale écoresponsable à Paris.'
+      },
+      {
+        name: 'keywords',
+        content: 'FAQ, questions, marketplace locale, Paris, écoresponsable'
+      }
+    ]
+  })
+})
+</script>
 
 <template>
   <section class="page">

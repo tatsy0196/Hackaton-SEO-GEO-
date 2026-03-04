@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getProductBySlug} from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
@@ -26,6 +27,20 @@ onMounted(async () => {
     trackEvent('view_item', {
       product_id: product.value.id,
       price: product.value.price
+    })
+
+    useHead({
+      title: `${product.value.name} - GreenNoble`,
+      meta: [
+        {
+          name: 'description',
+          content: product.value.shortDescription || `Découvrez ${product.value.name} sur GreenNoble marketplace locale`
+        },
+        {
+          name: 'keywords',
+          content: `${product.value.name}, ${product.value.category}, produits bio, Paris`
+        }
+      ]
     })
   }
 })

@@ -1,8 +1,26 @@
 <script setup lang="ts">
+import { onMounted } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const slug = route.params.slug as string
+
+onMounted(() => {
+  useHead({
+    title: `Guide: ${slug} - GreenNoble`,
+    meta: [
+      {
+        name: 'description',
+        content: `Contenu SEO pour le guide "${slug}". Partie du cluster sémantique marketplace locale écoresponsable Paris.`
+      },
+      {
+        name: 'keywords',
+        content: `${slug}, guide, marketplace locale, Paris, écoresponsable`
+      }
+    ]
+  })
+})
 </script>
 
 <template>

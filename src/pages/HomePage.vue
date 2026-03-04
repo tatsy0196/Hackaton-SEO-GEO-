@@ -168,6 +168,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { RouterLink } from 'vue-router'
 import ProductCard from '../components/products/ProductCard.vue'
 import { getProducts, getVendors } from '../services/api'
@@ -188,6 +189,20 @@ onMounted(async () => {
   const allProducts = await getProducts()
   featuredProducts.value = allProducts.slice(0, 3)
   vendors.value = await getVendors()
+
+  useHead({
+    title: 'GreenNoble - Marketplace locale écoresponsable à Paris',
+    meta: [
+      {
+        name: 'description',
+        content: 'Découvrez des producteurs et commerces locaux engagés à Paris. Commandez des produits bio, artisanaux et de saison en ligne.'
+      },
+      {
+        name: 'keywords',
+        content: 'marketplace locale, produits bio, Paris, écoresponsable, producteurs locaux'
+      }
+    ]
+  })
 })
 </script>
 
