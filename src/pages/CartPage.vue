@@ -91,7 +91,7 @@ const formatPrice = (price: number) => {
               <button 
                 @click="increaseQuantity(item.product.id, item.quantity)"
                 class="qty-btn"
-              >
+              > +
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="12" y1="5" x2="12" y2="19"></line>
                   <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -223,7 +223,7 @@ const formatPrice = (price: number) => {
 
 .btn-shop {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   color: white;
   padding: 1rem 2.5rem;
   border-radius: 10px;
@@ -234,7 +234,7 @@ const formatPrice = (price: number) => {
 
 .btn-shop:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
 }
 
 /* Contenu panier */
@@ -299,7 +299,7 @@ const formatPrice = (price: number) => {
 }
 
 .item-name:hover {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .item-category {
@@ -345,9 +345,9 @@ const formatPrice = (price: number) => {
 }
 
 .qty-btn:hover:not(:disabled) {
-  background: #667eea;
+  background: #2E7D32;
   color: white;
-  border-color: #667eea;
+  border-color: #2E7D32;
 }
 
 .qty-btn:disabled {
@@ -447,12 +447,12 @@ const formatPrice = (price: number) => {
 .total-amount {
   font-size: 1.75rem;
   font-weight: 800;
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .btn-checkout {
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   color: white;
   padding: 1rem;
   border: none;
@@ -466,7 +466,7 @@ const formatPrice = (price: number) => {
 
 .btn-checkout:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
 }
 
 .btn-clear {
@@ -534,3 +534,4 @@ const formatPrice = (price: number) => {
   }
 }
 </style>
+
