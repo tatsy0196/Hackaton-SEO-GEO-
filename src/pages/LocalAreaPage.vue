@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useHead } from '@vueuse/head'
 import { useRoute } from 'vue-router'
 import {getProductsByArrondissement} from "../services/api.ts";
 
@@ -10,6 +11,20 @@ const products = ref<any[]>([])
 onMounted(async () => {
   arrondissement.value = route.params.arrondissement as string
   products.value = await getProductsByArrondissement()
+
+  useHead({
+    title: `Produits locaux à Paris ${arrondissement.value} - GreenNoble`,
+    meta: [
+      {
+        name: 'description',
+        content: `Découvrez les produits écoresponsables disponibles dans le ${arrondissement.value}ᵉ arrondissement de Paris.`
+      },
+      {
+        name: 'keywords',
+        content: `Paris ${arrondissement.value}, produits locaux, bio, écoresponsable, arrondissement`
+      }
+    ]
+  })
 })
 </script>
 

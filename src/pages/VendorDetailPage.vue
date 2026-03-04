@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import {getVendorBySlug} from "../services/api.ts";
+import { useHead } from '@vueuse/head'
+import { useRoute, RouterLink } from 'vue-router'
+import {getVendorBySlug, getProductsByVendor} from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
 
 const route = useRoute()
 const vendor = ref<any | null>(null)
+const vendorProducts = ref<any[]>([])
 
 onMounted(async () => {
   const slug = route.params.slug as string
@@ -15,6 +17,23 @@ onMounted(async () => {
     trackEvent('view_vendor', {
       vendor_id: vendor.value.id,
       city: vendor.value.city
+    })
+    
+    // Charger les produits du vendeur
+    vendorProducts.value = await getProductsByVendor(vendor.value.id)
+
+    useHead({
+      title: `${vendor.value.name} - Producteur local écoresponsable - GreenNoble`,
+      meta: [
+        {
+          name: 'description',
+          content: vendor.value.shortDescription || `Découvrez ${vendor.value.name}, producteur local écoresponsable à ${vendor.value.city}`
+        },
+        {
+          name: 'keywords',
+          content: `${vendor.value.name}, producteur local, ${vendor.value.city}, écoresponsable, bio`
+        }
+      ]
     })
   }
 })
@@ -100,7 +119,7 @@ onMounted(async () => {
           <div class="sidebar-card cta-card">
             <h3>Découvrir</h3>
             <p>Parcourez nos produits sélectionnés avec soin.</p>
-            <button class="btn-explore">Voir les produits</button>
+            <RouterLink to="/produits" class="btn-explore">Voir les produits</RouterLink>
           </div>
 
           <div class="sidebar-card eco-card">
@@ -108,6 +127,54 @@ onMounted(async () => {
             <p>Ce producteur s'engage pour un Paris plus durable avec des pratiques respectueuses de l'environnement.</p>
           </div>
         </aside>
+      </div>
+
+      <!-- Section des produits du vendeur -->
+      <div v-if="vendorProducts.length" class="vendor-products-section">
+        <h2>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+          Produits disponibles ({{ vendorProducts.length }})
+        </h2>
+        <div class="products-grid">
+          <RouterLink 
+            v-for="product in vendorProducts" 
+            :key="product.id"
+            :to="`/produit/${product.slug}`"
+            class="product-card"
+          >
+            <div class="product-image-wrapper">
+              <img :src="product.imageUrl" :alt="product.name" />
+              <div class="product-overlay">
+                <span class="view-btn">Voir le produit</span>
+              </div>
+            </div>
+            <div class="product-content">
+              <span class="product-category">{{ product.category }}</span>
+              <h3>{{ product.name }}</h3>
+              <p class="product-desc">{{ product.shortDescription }}</p>
+              <div class="product-footer">
+                <span class="product-price">{{ product.price.toFixed(2) }} €</span>
+                <span v-if="product.stock > 0" class="product-stock in-stock">En stock</span>
+                <span v-else class="product-stock out-stock">Rupture</span>
+              </div>
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+
+      <!-- Message si aucun produit -->
+      <div v-else class="no-products">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <h3>Aucun produit disponible</h3>
+        <p>Ce vendeur n'a pas encore de produits en ligne.</p>
       </div>
     </div>
   </div>
@@ -361,6 +428,9 @@ onMounted(async () => {
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 0.95em;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
 }
 
 .btn-explore:hover {
@@ -383,6 +453,190 @@ onMounted(async () => {
   margin: 0;
   font-size: 0.95em;
   line-height: 1.5;
+}
+
+/* Vendor Products Section */
+.vendor-products-section {
+  margin-top: 4rem;
+}
+
+.vendor-products-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2em;
+  color: #1b5e20;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+.vendor-products-section svg {
+  flex-shrink: 0;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.product-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image-wrapper img {
+  transform: scale(1.1);
+}
+
+.product-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(27, 94, 32, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.view-btn {
+  background: white;
+  color: #1b5e20;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95em;
+}
+
+.product-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.product-category {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #1b5e20;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  width: fit-content;
+}
+
+.product-content h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: #2c3e50;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.product-desc {
+  margin: 0;
+  color: #666;
+  font-size: 0.9em;
+  line-height: 1.5;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.product-price {
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1b5e20;
+}
+
+.product-stock {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
+.product-stock.in-stock {
+  background: #d4edda;
+  color: #155724;
+}
+
+.product-stock.out-stock {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* No products message */
+.no-products {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-top: 4rem;
+}
+
+.no-products svg {
+  color: #ccc;
+  margin-bottom: 1.5rem;
+}
+
+.no-products h3 {
+  color: #666;
+  font-size: 1.5em;
+  margin: 0 0 0.5rem 0;
+}
+
+.no-products p {
+  color: #999;
+  margin: 0;
 }
 
 /* Loading State */
@@ -444,6 +698,14 @@ onMounted(async () => {
 
   .vendor-sidebar {
     order: -1;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vendor-products-section h2 {
+    font-size: 1.5em;
   }
 }
 </style>

@@ -9,15 +9,15 @@ const vendors = ref<any[]>([])
 onMounted(async () => {
   vendors.value = await getVendors()
 
-        useHead({
-        title:  "Liste des vendeurs de notre communeauté - GreeNoble",
-        meta: [
-          {
-            name: 'description',
-            content: "Cette page regroupe l\'ensemble des vendeurs de notre magnifique communauté écoresponsable"
-          }
-        ]
-      })
+  useHead({
+    title: "Liste des vendeurs de notre communauté - GreenNoble",
+    meta: [
+      {
+        name: 'description',
+        content: "Cette page regroupe l'ensemble des vendeurs de notre magnifique communauté écoresponsable"
+      }
+    ]
+  })
 })
 </script>
 
