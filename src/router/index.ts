@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from "../pages/HomePage.vue";
 import ProductsListPage from "../pages/ProductsListPage.vue";
 import LocalAreaPage from "../pages/LocalAreaPage.vue";
@@ -10,7 +10,7 @@ import VendorsListPage from "../pages/VendorsListPage.vue";
 import VendorDetailPage from "../pages/VendorDetailPage.vue";
 
 
-const routes: RouteRecordRaw[] = [
+const routes = [
     { path: '/', name: 'home', component: HomePage },
     { path: '/produits', name: 'products', component: ProductsListPage },
     { path: '/produits/:slug', name: 'product-detail', component: ProductDetailPage },

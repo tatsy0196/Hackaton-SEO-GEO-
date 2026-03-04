@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="header-inner">
-      <RouterLink to="/" class="logo">GreenCorner Paris</RouterLink>
+      <RouterLink to="/" class="logo">GreenNoble</RouterLink>
       <nav class="nav">
         <RouterLink to="/produits">Produits</RouterLink>
         <RouterLink to="/vendeurs">Vendeurs</RouterLink>

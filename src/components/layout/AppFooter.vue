@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="footer-inner">
-      <p>© {{ year }} GreenCorner Paris – Marketplace locale écoresponsable</p>
+      <p>© {{ year }} GreenNoble – Marketplace locale écoresponsable</p>
       <p class="small">Projet pédagogique – M2 IW</p>
     </div>
   </footer>

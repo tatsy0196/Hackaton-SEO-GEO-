@@ -6,7 +6,7 @@
 
     <div class="faq">
       <details>
-        <summary>Qu'est-ce que GreenCorner Paris ?</summary>
+        <summary>Qu'est-ce que GreenNoble ?</summary>
         <p>Une marketplace qui met en relation les consommateurs parisiens avec des producteurs et commerces locaux écoresponsables.</p>
       </details>
 
