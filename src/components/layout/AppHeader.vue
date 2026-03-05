@@ -11,6 +11,12 @@
         <RouterLink to="/produits" class="nav-link">Produits</RouterLink>
         <RouterLink to="/vendeurs" class="nav-link">Vendeurs</RouterLink>
         <RouterLink to="/faq" class="nav-link">FAQ</RouterLink>
+        <RouterLink to="/vendeur/connexion" class="nav-link vendor-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 7h-9M14 17H5M17 12H3M12 2L2 7l10 5 10-5-10-5z"/>
+          </svg>
+          Espace Vendeur
+        </RouterLink>
       </nav>
       
       <div class="header-actions">
@@ -109,6 +115,22 @@ onMounted(() => {
   font-size: 1rem;
   transition: color 0.3s ease;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-link.vendor-link {
+  color: #2E7D32;
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.1) 0%, rgba(67, 160, 71, 0.1) 100%);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(46, 125, 50, 0.2);
+}
+
+.nav-link.vendor-link:hover {
+  background: linear-gradient(135deg, rgba(46, 125, 50, 0.15) 0%, rgba(67, 160, 71, 0.15) 100%);
+  border-color: rgba(46, 125, 50, 0.3);
 }
 
 .nav-link:hover {

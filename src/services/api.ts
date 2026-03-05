@@ -1,3 +1,40 @@
+// Types
+export interface Vendor {
+  id: string
+  slug: string
+  name: string
+  shortDescription: string
+  seoDescription?: string
+  address: string
+  postalCode: string
+  city: string
+  labels: string[]
+  imageUrl: string
+  products: any[]
+}
+
+export interface Product {
+  id: string
+  slug: string
+  name: string
+  price: number
+  discountPrice?: number
+  vendorId: string
+  category: string
+  city: string
+  shortDescription: string
+  imageUrl: string
+  images: string[]
+  longDescription: string
+  weight: string
+  origin: string
+  composition: string
+  conservation: string
+  nutritionalInfo: string
+  certifications: string[]
+  stock: number
+}
+
 // Données mock
 const vendors = [
     {
@@ -149,21 +186,102 @@ const products = [
     }
 ]
 
-export const getVendors = async () => vendors
-export const getVendorBySlug = async (slug: string) =>
-    vendors.find(v => v.slug === slug) ?? null
+// Fonction pour récupérer les vendeurs du localStorage
+const getVendorsFromStorage = (): Vendor[] => {
+  const stored = localStorage.getItem('greennoble_vendors')
+  if (!stored) return []
+  
+  try {
+    const vendorsMap = JSON.parse(stored)
+    return Object.values(vendorsMap).map((v: any) => {
+      const vendor = v.vendor
+      return {
+        id: vendor.id,
+        slug: vendor.businessName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-'),
+        name: vendor.businessName,
+        shortDescription: vendor.description || 'Vendeur local écoresponsable',
+        seoDescription: vendor.description,
+        address: vendor.address,
+        postalCode: vendor.postalCode,
+        city: vendor.city,
+        labels: vendor.labels,
+        imageUrl: vendor.imageUrl || 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&h=400&fit=crop',
+        products: []
+      }
+    })
+  } catch (error) {
+    console.error('Erreur chargement vendeurs:', error)
+    return []
+  }
+}
 
-export const getProducts = async () => products
-export const getProductBySlug = async (slug: string) =>
-    products.find(p => p.slug === slug) ?? null
+// Fonction pour récupérer les produits du localStorage
+const getProductsFromStorage = (): Product[] => {
+  const stored = localStorage.getItem('greennoble_vendor_products')
+  if (!stored) return []
+  
+  try {
+    const vendorProducts = JSON.parse(stored)
+    return vendorProducts.map((p: any) => ({
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      price: p.price,
+      discountPrice: p.discountPrice,
+      vendorId: p.vendorId,
+      category: p.category,
+      city: p.city,
+      shortDescription: p.shortDescription,
+      imageUrl: p.imageUrl,
+      images: p.images || [p.imageUrl],
+      longDescription: p.longDescription,
+      weight: p.weight,
+      origin: p.origin,
+      composition: p.composition,
+      conservation: p.conservation,
+      nutritionalInfo: p.nutritionalInfo,
+      certifications: p.certifications,
+      stock: p.stock
+    }))
+  } catch (error) {
+    console.error('Erreur chargement produits:', error)
+    return []
+  }
+}
 
-export const getProductsByArrondissement = async () =>
-    products.filter(p => p.city === 'Grenoble') // Simule un filtre par arrondissement
+export const getVendors = async () => {
+  const storageVendors = getVendorsFromStorage()
+  return [...vendors, ...storageVendors]
+}
+
+export const getVendorBySlug = async (slug: string) => {
+  const allVendors = await getVendors()
+  return allVendors.find(v => v.slug === slug) ?? null
+}
+
+export const getProducts = async () => {
+  const storageProducts = getProductsFromStorage()
+  return [...products, ...storageProducts]
+}
+
+export const getProductBySlug = async (slug: string) => {
+  const allProducts = await getProducts()
+  return allProducts.find(p => p.slug === slug) ?? null
+}
+
+export const getProductsByArrondissement = async () => {
+    const allProducts = await getProducts()
+    return allProducts.filter(p => p.city === 'Grenoble')
+}
 
 // Récupérer le vendeur d'un produit
-export const getVendorForProduct = async (vendorId: string) =>
-    vendors.find(v => v.id === vendorId) ?? null
+export const getVendorForProduct = async (vendorId: string) => {
+    const allVendors = await getVendors()
+    return allVendors.find(v => v.id === vendorId) ?? null
+}
 
 // Récupérer tous les produits d'un vendeur
-export const getProductsByVendor = async (vendorId: string) =>
-    products.filter(p => p.vendorId === vendorId)
+export const getProductsByVendor = async (vendorId: string) => {
+    const allProducts = await getProducts()
+    return allProducts.filter(p => p.vendorId === vendorId)
+}
