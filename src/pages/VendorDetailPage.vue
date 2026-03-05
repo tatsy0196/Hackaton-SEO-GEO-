@@ -143,7 +143,7 @@ onMounted(async () => {
           <RouterLink 
             v-for="product in vendorProducts" 
             :key="product.id"
-            :to="`/produit/${product.slug}`"
+            :to="`/produits/${product.slug}`"
             class="product-card"
           >
             <div class="product-image-wrapper">
