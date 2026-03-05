@@ -194,6 +194,11 @@ const products: Product[] = [
 
 // Fonction pour récupérer les vendeurs du localStorage
 const getVendorsFromStorage = (): Vendor[] => {
+  // Vérifier qu'on est dans le navigateur
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+    return []
+  }
+
   const stored = localStorage.getItem('greennoble_vendors')
   if (!stored) return []
 
@@ -223,6 +228,11 @@ const getVendorsFromStorage = (): Vendor[] => {
 
 // Fonction pour récupérer les produits du localStorage
 const getProductsFromStorage = (): Product[] => {
+  // Vérifier qu'on est dans le navigateur
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+    return []
+  }
+
   const stored = localStorage.getItem('greennoble_vendor_products')
   if (!stored) return []
 
