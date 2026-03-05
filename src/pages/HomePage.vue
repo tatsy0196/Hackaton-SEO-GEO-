@@ -16,7 +16,12 @@
   <!-- Section Valeurs -->
   <section class="values">
     <div class="container">
-      <h2>Pourquoi choisir GreenNoble ?</h2>
+      <div class="section-header">
+        <span class="section-badge">Nos Engagements</span>
+        <h2>L'excellence locale au service de votre santé</h2>
+        <p class="section-subtitle">Découvrez pourquoi plus de 5000 Grenoblois nous font confiance pour leurs courses écoresponsables</p>
+      </div>
+      
       <div class="carousel-container">
         <button @click="previousSlide" class="carousel-btn prev" aria-label="Précédent">‹</button>
         <div class="carousel-wrapper">
@@ -24,29 +29,52 @@
             <div class="carousel-slide">
               <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=500&fit=crop" alt="Bio et Local">
               <div class="slide-content">
+                <div class="slide-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                    <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                  </svg>
+                </div>
                 <h3>100% Bio & Local</h3>
-                <p>Tous nos produits proviennent de producteurs locaux certifiés bio dans un rayon de 50km maximum.</p>
+                <p>Tous nos produits proviennent de producteurs locaux certifiés bio dans un rayon de 50km maximum autour de Grenoble.</p>
               </div>
             </div>
             <div class="carousel-slide">
               <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=800&h=500&fit=crop" alt="Livraison Éco">
               <div class="slide-content">
-                <h3>Livraison Éco</h3>
-                <p>Click & collect, points relais ou livraison à vélo pour réduire notre empreinte carbone.</p>
+                <div class="slide-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 6v6l4 2"></path>
+                  </svg>
+                </div>
+                <h3>Livraison Éco-responsable</h3>
+                <p>Click & collect, points relais ou livraison à vélo électrique pour réduire notre empreinte carbone à zéro.</p>
               </div>
             </div>
             <div class="carousel-slide">
               <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=800&h=500&fit=crop" alt="Commerce Équitable">
               <div class="slide-content">
+                <div class="slide-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
                 <h3>Commerce Équitable</h3>
-                <p>Prix justes pour les producteurs, transparence totale sur les marges et les origines.</p>
+                <p>Prix justes pour les producteurs, transparence totale sur les marges et les origines de chaque produit.</p>
               </div>
             </div>
             <div class="carousel-slide">
               <img src="https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&h=500&fit=crop" alt="Zéro Déchet">
               <div class="slide-content">
-                <h3>Zéro Déchet</h3>
-                <p>Emballages consignés, vrac privilégié et engagement pour réduire les déchets plastiques.</p>
+                <div class="slide-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                  </svg>
+                </div>
+                <h3>Engagement Zéro Déchet</h3>
+                <p>Emballages consignés, vrac privilégié et engagement fort pour éliminer les déchets plastiques.</p>
               </div>
             </div>
           </div>
@@ -309,7 +337,43 @@ section h2 {
 
 /* Section Valeurs */
 .values {
-  background: #f8faf9;
+  background: linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%);
+  padding: 5rem 0;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+.section-header h2 {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #1b5e20;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  color: #546e7a;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .carousel-container {
@@ -320,13 +384,13 @@ section h2 {
 
 .carousel-wrapper {
   overflow: hidden;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 }
 
 .carousel-track {
   display: flex;
-  transition: transform 0.5s ease-in-out;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .carousel-slide {
@@ -336,7 +400,7 @@ section h2 {
 
 .carousel-slide img {
   width: 100%;
-  height: 500px;
+  height: 550px;
   object-fit: cover;
   display: block;
 }
@@ -346,57 +410,86 @@ section h2 {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  background: linear-gradient(to top, rgba(27, 94, 32, 0.95), rgba(27, 94, 32, 0.4));
   color: white;
-  padding: 3rem 2rem 2rem;
+  padding: 4rem 3rem 3rem;
   text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.slide-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.slide-icon svg {
+  color: white;
 }
 
 .slide-content h3 {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
+  font-size: 2.25rem;
+  margin-bottom: 1rem;
   color: white;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .slide-content p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  max-width: 600px;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-width: 650px;
   margin: 0 auto;
-  opacity: 0.95;
+  opacity: 0.98;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .carousel-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #1b5e20;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  font-weight: 300;
 }
 
 .carousel-btn:hover {
   background: white;
-  transform: translateY(-50%) scale(1.1);
+  transform: translateY(-50%) scale(1.15);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
 }
 
 .carousel-btn.prev {
-  left: 1rem;
+  left: 1.5rem;
 }
 
 .carousel-btn.next {
-  right: 1rem;
+  right: 1.5rem;
 }
 
 .carousel-dots {
