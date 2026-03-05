@@ -25,15 +25,11 @@
           <span v-if="cartCount > 0" class="badge">{{ cartCount }}</span>
         </RouterLink>
 
-        <RouterLink v-if="user" to="/compte" class="icon-btn user-btn desktop-only">
+        <RouterLink :to="user ? '/compte' : '/connexion'" class="icon-btn user-btn desktop-only">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
-        </RouterLink>
-
-        <RouterLink v-else to="/connexion" class="btn-login desktop-only">
-          Connexion
         </RouterLink>
 
         <!-- Hamburger button — mobile only -->
