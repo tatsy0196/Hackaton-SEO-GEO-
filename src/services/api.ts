@@ -1,5 +1,44 @@
+export interface Vendor {
+    id: string;
+    slug: string;
+    name: string;
+    bioCertification: string;
+    bioCertifDate: Date;
+    shortDescription: string;
+    seoDescription?: string;
+    address: string;
+    postalCode: string;
+    city: string;
+    labels: string[];
+    imageUrl: string;
+    products: Product[];
+}
+
+export interface Product {
+    id: string;
+    slug: string;
+    name: string;
+    labels?: string[];
+    price: number;
+    discountPrice?: number;
+    vendorId: string;
+    category: string;
+    city: string;
+    shortDescription: string;
+    imageUrl: string;
+    images: string[];
+    longDescription: string;
+    weight: string;
+    origin: string;
+    composition: string;
+    conservation: string;
+    nutritionalInfo: string;
+    certifications: string[];
+    stock: number;
+}
+
 // Données mock
-const vendors = [
+const vendors: Vendor[] = [
     {
         id: 'v1',
         bioCertification: "acquis",
@@ -31,7 +70,7 @@ const vendors = [
     }
 ]
 
-const products = [
+const products: Product[] = [
     {
         id: 'p1',
         slug: 'panier-legumes-bio-Grenoble',
@@ -153,21 +192,21 @@ const products = [
     }
 ]
 
-export const getVendors = async () => vendors
-export const getVendorBySlug = async (slug: string) =>
+export const getVendors = async (): Promise<Vendor[]> => vendors
+export const getVendorBySlug = async (slug: string): Promise<Vendor | null> =>
     vendors.find(v => v.slug === slug) ?? null
 
-export const getProducts = async () => products
-export const getProductBySlug = async (slug: string) =>
+export const getProducts = async (): Promise<Product[]> => products
+export const getProductBySlug = async (slug: string): Promise<Product | null> =>
     products.find(p => p.slug === slug) ?? null
 
-export const getProductsByArrondissement = async () =>
+export const getProductsByArrondissement = async (): Promise<Product[]> =>
     products.filter(p => p.city === 'Grenoble') // Simule un filtre par arrondissement
 
 // Récupérer le vendeur d'un produit
-export const getVendorForProduct = async (vendorId: string) =>
+export const getVendorForProduct = async (vendorId: string): Promise<Vendor | null> =>
     vendors.find(v => v.id === vendorId) ?? null
 
 // Récupérer tous les produits d'un vendeur
-export const getProductsByVendor = async (vendorId: string) =>
+export const getProductsByVendor = async (vendorId: string): Promise<Product[]> =>
     products.filter(p => p.vendorId === vendorId)
