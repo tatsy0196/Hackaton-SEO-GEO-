@@ -14,7 +14,7 @@ const showAdded = ref(false)
 const handleAddToCart = (e: Event) => {
   e.preventDefault()
   addToCart(props.product, 1)
-  
+
   showAdded.value = true
   setTimeout(() => {
     showAdded.value = false
@@ -32,7 +32,7 @@ const displayPrice = props.product.discountPrice || props.product.price
         -{{ Math.round(((product.price - product.discountPrice) / product.price) * 100) }}%
       </div>
     </div>
-    
+
     <div class="card-content">
       <h3>{{ product.name }}</h3>
       <div class="price-row">

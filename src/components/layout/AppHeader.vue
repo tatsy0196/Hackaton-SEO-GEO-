@@ -7,6 +7,16 @@
         </svg>
         GreenNoble
       </RouterLink>
+      <nav class="nav">
+        <RouterLink to="/produits" class="nav-link">Produits</RouterLink>
+        <RouterLink to="/vendeurs" class="nav-link">Vendeurs</RouterLink>
+        <RouterLink to="/faq" class="nav-link">FAQ</RouterLink>
+      <RouterLink to="/" class="logo">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+        GreenNoble
+      </RouterLink>
 
       <!-- Desktop nav -->
       <nav class="nav desktop-nav">
@@ -119,6 +129,20 @@ import { getCurrentUser, type User } from '../../services/auth'
 
 const { cartCount } = useCart()
 const user = ref<User | null>(null)
+
+onMounted(() => {
+  user.value = getCurrentUser()
+
+  // Écouter les changements d'authentification
+  window.addEventListener('storage', () => {
+    user.value = getCurrentUser()
+  })
+})
+import { useCart } from '../../services/cart'
+import { getCurrentUser, type User } from '../../services/auth'
+
+const { cartCount } = useCart()
+const user = ref<User | null>(null)
 const menuOpen = ref(false)
 
 function openMenu() {
@@ -150,7 +174,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* ─── Header ─────────────────────────────────────────────── */
 .header {
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -169,7 +192,6 @@ onUnmounted(() => {
   gap: 2rem;
 }
 
-/* ─── Logo ───────────────────────────────────────────────── */
 .logo {
   display: flex;
   align-items: center;
@@ -182,14 +204,13 @@ onUnmounted(() => {
 }
 
 .logo svg {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .logo:hover {
-  color: #667eea;
+  color: #2E7D32;
 }
 
-/* ─── Desktop nav ────────────────────────────────────────── */
 .nav {
   display: flex;
   gap: 2rem;
@@ -207,11 +228,11 @@ onUnmounted(() => {
 }
 
 .nav-link:hover {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .nav-link.router-link-active {
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .nav-link.router-link-active::after {
@@ -221,11 +242,10 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   height: 3px;
-  background: #667eea;
+  background: #2E7D32;
   border-radius: 3px;
 }
 
-/* ─── Header actions ─────────────────────────────────────── */
 .header-actions {
   display: flex;
   align-items: center;
@@ -247,7 +267,7 @@ onUnmounted(() => {
 
 .icon-btn:hover {
   background: #f7fafc;
-  color: #667eea;
+  color: #2E7D32;
 }
 
 .cart-btn .badge {
@@ -268,7 +288,7 @@ onUnmounted(() => {
 }
 
 .btn-login {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   color: white;
   padding: 0.625rem 1.5rem;
   border-radius: 10px;
@@ -280,6 +300,29 @@ onUnmounted(() => {
 .btn-login:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 1rem;
+  }
+
+  .nav {
+    gap: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.9rem;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .btn-login {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* ─── Hamburger ──────────────────────────────────────────── */
@@ -480,3 +523,4 @@ onUnmounted(() => {
   }
 }
 </style>
+

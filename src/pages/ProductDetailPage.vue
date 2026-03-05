@@ -18,6 +18,9 @@ const relatedProducts = ref<Product[]>([])
 const { addToCart: addToCartService } = useCart()
 const showAdded = ref(false)
 
+const { addToCart: addToCartService, isInCart } = useCart()
+const showAdded = ref(false)
+
 const selectImage = (index: number) => {
   selectedImage.value = index
 }
@@ -28,10 +31,10 @@ const selectTab = (tab: string) => {
 
 const addToCart = () => {
   if (!product.value || !product.value.stock) return
-  
+
   addToCartService(product.value, quantity.value)
   showAdded.value = true
-  
+
   trackEvent('add_to_cart', {
     product_id: product.value.id,
     quantity: quantity.value,
