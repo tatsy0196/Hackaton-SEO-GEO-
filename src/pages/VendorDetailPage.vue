@@ -426,7 +426,6 @@ onMounted(async () => {
 }
 
 .btn-explore {
-  width: 100%;
   padding: 0.75rem 1.5rem;
   background: white;
   color: #1b5e20;
