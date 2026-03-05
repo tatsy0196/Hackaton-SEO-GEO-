@@ -5,6 +5,7 @@ import type { Product } from './api'
 export interface CartItem {
   product: Product
   quantity: number
+  notes: string
 }
 
 const CART_STORAGE_KEY = 'greennoble_cart'
@@ -52,13 +53,13 @@ export const getCartItems = (): CartItem[] => {
 }
 
 // Ajouter un produit au panier
-export const addToCart = (product: Product, quantity: number = 1): void => {
+export const addToCart = (product: Product, quantity: number = 1, notes: string = ""): void => {
   const existingItem = cartItems.value.find(item => item.product.id === product.id)
   
   if (existingItem) {
     existingItem.quantity += quantity
   } else {
-    cartItems.value.push({ product, quantity })
+    cartItems.value.push({ product, quantity, notes })
   }
   
   saveCart()
@@ -70,12 +71,16 @@ export const updateQuantity = (productId: string, quantity: number): void => {
     removeFromCart(productId)
     return
   }
-  
+
   const item = cartItems.value.find(item => item.product.id === productId)
   if (item) {
     item.quantity = quantity
     saveCart()
   }
+}
+export const updateNotes = (productId: string, notes: string) => {
+  const item = cartItems.value.find(i => i.product.id === productId)
+  if (item) item.notes = notes
 }
 
 // Retirer un produit du panier
@@ -109,6 +114,7 @@ export const useCart = () => {
     cartTotal,
     addToCart,
     updateQuantity,
+    updateNotes,
     removeFromCart,
     clearCart,
     isInCart,

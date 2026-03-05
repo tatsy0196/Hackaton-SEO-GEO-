@@ -17,6 +17,7 @@ const relatedProducts = ref<Product[]>([])
 
 const { addToCart: addToCartService } = useCart()
 const showAdded = ref(false)
+const notes = ref("")
 
 const selectImage = (index: number) => {
   selectedImage.value = index
@@ -29,7 +30,7 @@ const selectTab = (tab: string) => {
 const addToCart = () => {
   if (!product.value || !product.value.stock) return
 
-  addToCartService(product.value, quantity.value)
+  addToCartService(product.value, quantity.value, notes.value)
   showAdded.value = true
 
   trackEvent('add_to_cart', {
@@ -37,14 +38,13 @@ const addToCart = () => {
     quantity: quantity.value,
     price: product.value.price
   })
-  
+
   setTimeout(() => {
     showAdded.value = false
   }, 2000)
 }
 
 const discountPercentage = computed(() => {
-  // Simuler un prix barré pour certains produits
   if (product.value?.id === 'p1' || product.value?.id === 'p19') {
     return 15
   }
@@ -67,15 +67,13 @@ onMounted(async () => {
       product_id: product.value.id,
       price: product.value.price
     })
-    
-    // Charger le vendeur du produit
+
     vendor.value = await getVendorForProduct(product.value.vendorId)
-    
-    // Charger les produits similaires
+
     const allProducts = await getProducts()
     relatedProducts.value = allProducts
-      .filter(p => product.value && ( p.id !== product.value.id && p.category === product.value.category))
-      .slice(0, 3)
+        .filter(p => product.value && ( p.id !== product.value.id && p.category === product.value.category))
+        .slice(0, 3)
 
     useHead({
       title: `${product.value.name} - GreenNoble`,
@@ -99,9 +97,7 @@ onMounted(async () => {
     <!-- Navigation fil d'Ariane -->
     <nav class="breadcrumb">
       <RouterLink to="/">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-        </svg>
+        <i class="fas fa-home"></i>
         Accueil
       </RouterLink>
       <span class="separator">›</span>
@@ -117,25 +113,20 @@ onMounted(async () => {
           <span v-if="discountPercentage" class="discount-badge">-{{ discountPercentage }}%</span>
           <span v-if="product.certifications?.includes('Bio AB')" class="bio-badge">🌿 BIO</span>
         </div>
-        
+
         <div class="main-image">
           <img :src="product.images[selectedImage]" :alt="product.name" />
           <div class="image-zoom-indicator">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.35-4.35"></path>
-              <line x1="11" y1="8" x2="11" y2="14"></line>
-              <line x1="8" y1="11" x2="14" y2="11"></line>
-            </svg>
+            <i class="fas fa-search-plus"></i>
           </div>
         </div>
-        
+
         <div class="thumbnails">
           <button
-            v-for="(image, index) in product.images"
-            :key="index"
-            @click="selectImage(index as number)"
-            :class="['thumbnail', { active: selectedImage === index }]"
+              v-for="(image, index) in product.images"
+              :key="index"
+              @click="selectImage(index as number)"
+              :class="['thumbnail', { active: selectedImage === index }]"
           >
             <img :src="image" :alt="`${product.name} - image ${index as number + 1}`" />
           </button>
@@ -147,18 +138,13 @@ onMounted(async () => {
         <div class="product-header">
           <div>
             <span class="category-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="3" y="3" width="7" height="7"></rect>
-                <rect x="14" y="3" width="7" height="7"></rect>
-                <rect x="14" y="14" width="7" height="7"></rect>
-                <rect x="3" y="14" width="7" height="7"></rect>
-              </svg>
+              <i class="fas fa-th-large"></i>
               {{ product.category }}
             </span>
             <h1>{{ product.name }}</h1>
           </div>
         </div>
-        
+
         <div class="rating-reviews">
           <div class="stars">
             <span v-for="i in 5" :key="i" class="star">★</span>
@@ -176,50 +162,30 @@ onMounted(async () => {
 
         <div class="highlights">
           <div class="highlight-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
+            <i class="fas fa-check-circle"></i>
             <span>Livraison gratuite dès 50€</span>
           </div>
           <div class="highlight-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polyline points="12 6 12 12 16 14"></polyline>
-            </svg>
+            <i class="fas fa-clock"></i>
             <span>Livraison sous 24-48h</span>
           </div>
           <div class="highlight-item">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
+            <i class="fas fa-map-marker-alt"></i>
             <span>Produit local - {{ product.origin }}</span>
           </div>
         </div>
 
         <div class="stock-info" v-if="product.stock">
           <div v-if="product.stock > 10" class="stock-indicator in-stock">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-              <polyline points="22 4 12 14.01 9 11.01"></polyline>
-            </svg>
+            <i class="fas fa-check-circle"></i>
             <span>En stock ({{ product.stock }} disponibles)</span>
           </div>
           <div v-else-if="product.stock > 0" class="stock-indicator low-stock">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="8" x2="12" y2="12"></line>
-              <line x1="12" y1="16" x2="12.01" y2="16"></line>
-            </svg>
+            <i class="fas fa-exclamation-circle"></i>
             <span>Stock limité - Plus que {{ product.stock }} disponibles</span>
           </div>
           <div v-else class="stock-indicator out-stock">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="15" y1="9" x2="9" y2="15"></line>
-              <line x1="9" y1="9" x2="15" y2="15"></line>
-            </svg>
+            <i class="fas fa-times-circle"></i>
             <span>Rupture de stock</span>
           </div>
         </div>
@@ -228,9 +194,7 @@ onMounted(async () => {
           <div class="cert-title">Certifications & Labels</div>
           <div class="cert-list">
             <div v-for="cert in product.certifications" :key="cert" class="cert-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
-              </svg>
+              <i class="fas fa-certificate"></i>
               <span>{{ cert }}</span>
             </div>
           </div>
@@ -244,37 +208,35 @@ onMounted(async () => {
             <label for="quantity">Quantité</label>
             <div class="quantity-controls">
               <button @click="quantity = Math.max(1, quantity - 1)" class="qty-btn" :disabled="!product.stock">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
+                <i class="fas fa-minus"></i>
               </button>
               <input type="number" id="quantity" v-model.number="quantity" min="1" :max="product.stock" :disabled="!product.stock" />
               <button @click="quantity = Math.min(product.stock, quantity + 1)" class="qty-btn" :disabled="!product.stock">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
+                <i class="fas fa-plus"></i>
               </button>
             </div>
           </div>
 
+          <div class="notes-section">
+            <label for="notes">
+              <i class="fas fa-pen"></i>
+              Instructions particulières
+            </label>
+            <textarea
+                id="notes"
+                v-model="notes"
+                placeholder="Si vous avez des consignes particulières, n'hésitez pas à en faire part à votre vendeur..."
+                class="notes-textarea"
+            />
+          </div>
           <div class="actions">
             <button @click="addToCart" class="add-cart" :class="{ added: showAdded }" :disabled="!product.stock">
-              <svg v-if="!showAdded" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
-              <svg v-else width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
+              <i v-if="!showAdded" class="fas fa-shopping-cart"></i>
+              <i v-else class="fas fa-check-circle"></i>
               <span>{{ showAdded ? 'Ajouté !' : (product.stock ? 'Ajouter au panier' : 'Rupture de stock') }}</span>
             </button>
             <button class="wishlist-btn">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-              </svg>
+              <i class="far fa-heart"></i>
             </button>
           </div>
         </div>
@@ -282,19 +244,14 @@ onMounted(async () => {
         <!-- Informations supplémentaires -->
         <div class="product-meta">
           <div class="meta-item" v-if="product.origin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-              <circle cx="12" cy="10" r="3"></circle>
-            </svg>
+            <i class="fas fa-map-marker-alt"></i>
             <div>
               <strong>Origine</strong>
               <span>{{ product.origin }}</span>
             </div>
           </div>
           <div class="meta-item" v-if="product.conservation">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38"></path>
-            </svg>
+            <i class="fas fa-sync-alt"></i>
             <div>
               <strong>Conservation</strong>
               <span>{{ product.conservation }}</span>
@@ -305,10 +262,7 @@ onMounted(async () => {
         <!-- Vendeur -->
         <div v-if="vendor" class="vendor-section">
           <div class="vendor-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-              <polyline points="9 22 9 12 15 12 15 22"></polyline>
-            </svg>
+            <i class="fas fa-store"></i>
             <h3>Vendu par</h3>
           </div>
           <div class="vendor-card">
@@ -319,10 +273,7 @@ onMounted(async () => {
               <h4>{{ vendor.name }}</h4>
               <p class="vendor-description">{{ vendor.shortDescription }}</p>
               <div class="vendor-location">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
+                <i class="fas fa-map-marker-alt"></i>
                 <span>{{ vendor.postalCode }} {{ vendor.city }}</span>
               </div>
               <div v-if="vendor.labels?.length" class="vendor-labels">
@@ -332,10 +283,7 @@ onMounted(async () => {
               </div>
               <RouterLink :to="`/vendeurs/${vendor.slug}`" class="vendor-link">
                 Voir le profil du vendeur
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-                </svg>
+                <i class="fas fa-arrow-right"></i>
               </RouterLink>
             </div>
           </div>
@@ -344,20 +292,13 @@ onMounted(async () => {
         <!-- Sécurité et garanties -->
         <div class="trust-badges">
           <div class="trust-item">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-            </svg>
+            <i class="fas fa-shield-alt"></i>
             <span>Paiement sécurisé</span>
           </div>
           <div class="trust-item">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-              <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-              <line x1="12" y1="22.08" x2="12" y2="12"></line>
-            </svg>
+            <i class="fas fa-box-open"></i>
             <span>Fraîcheur garantie</span>
           </div>
-
         </div>
       </div>
     </div>
@@ -365,27 +306,27 @@ onMounted(async () => {
     <!-- Tabs avec détails -->
     <div class="product-details">
       <div class="tabs-header">
-        <button 
-          @click="selectTab('description')" 
-          :class="['tab-btn', { active: activeTab === 'description' }]"
+        <button
+            @click="selectTab('description')"
+            :class="['tab-btn', { active: activeTab === 'description' }]"
         >
           Description
         </button>
-        <button 
-          @click="selectTab('composition')" 
-          :class="['tab-btn', { active: activeTab === 'composition' }]"
+        <button
+            @click="selectTab('composition')"
+            :class="['tab-btn', { active: activeTab === 'composition' }]"
         >
           Composition
         </button>
-        <button 
-          @click="selectTab('nutrition')" 
-          :class="['tab-btn', { active: activeTab === 'nutrition' }]"
+        <button
+            @click="selectTab('nutrition')"
+            :class="['tab-btn', { active: activeTab === 'nutrition' }]"
         >
           Nutrition
         </button>
-        <button 
-          @click="selectTab('reviews')" 
-          :class="['tab-btn', { active: activeTab === 'reviews' }]"
+        <button
+            @click="selectTab('reviews')"
+            :class="['tab-btn', { active: activeTab === 'reviews' }]"
         >
           Avis (127)
         </button>
@@ -395,34 +336,14 @@ onMounted(async () => {
         <div v-show="activeTab === 'description'" class="tab-panel fade-in">
           <h3>Description détaillée</h3>
           <p class="long-description">{{ product.longDescription }}</p>
-          
+
           <div class="key-features">
             <h4>Points clés</h4>
             <ul class="features-list">
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Produit 100% bio et naturel
-              </li>
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Cultivé localement à {{ product.origin }}
-              </li>
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Fraîcheur garantie - Récolte récente
-              </li>
-              <li>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="20 6 9 17 4 12"></polyline>
-                </svg>
-                Respectueux de l'environnement
-              </li>
+              <li><i class="fas fa-check"></i> Produit 100% bio et naturel</li>
+              <li><i class="fas fa-check"></i> Cultivé localement à {{ product.origin }}</li>
+              <li><i class="fas fa-check"></i> Fraîcheur garantie - Récolte récente</li>
+              <li><i class="fas fa-check"></i> Respectueux de l'environnement</li>
             </ul>
           </div>
         </div>
@@ -443,40 +364,19 @@ onMounted(async () => {
             <p class="nutrition-desc">{{ product.nutritionalInfo }}</p>
             <table class="nutrition-table">
               <thead>
-                <tr>
-                  <th>Valeurs nutritionnelles</th>
-                  <th>Pour 100g</th>
-                </tr>
+              <tr>
+                <th>Valeurs nutritionnelles</th>
+                <th>Pour 100g</th>
+              </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Énergie</td>
-                  <td>165 kJ / 40 kcal</td>
-                </tr>
-                <tr>
-                  <td>Matières grasses</td>
-                  <td>0,2 g</td>
-                </tr>
-                <tr>
-                  <td>dont acides gras saturés</td>
-                  <td>0,05 g</td>
-                </tr>
-                <tr>
-                  <td>Glucides</td>
-                  <td>7,6 g</td>
-                </tr>
-                <tr>
-                  <td>dont sucres</td>
-                  <td>4,7 g</td>
-                </tr>
-                <tr>
-                  <td>Protéines</td>
-                  <td>0,9 g</td>
-                </tr>
-                <tr>
-                  <td>Sel</td>
-                  <td>0,07 g</td>
-                </tr>
+              <tr><td>Énergie</td><td>165 kJ / 40 kcal</td></tr>
+              <tr><td>Matières grasses</td><td>0,2 g</td></tr>
+              <tr><td>dont acides gras saturés</td><td>0,05 g</td></tr>
+              <tr><td>Glucides</td><td>7,6 g</td></tr>
+              <tr><td>dont sucres</td><td>4,7 g</td></tr>
+              <tr><td>Protéines</td><td>0,9 g</td></tr>
+              <tr><td>Sel</td><td>0,07 g</td></tr>
               </tbody>
             </table>
           </div>
@@ -547,11 +447,11 @@ onMounted(async () => {
     <div v-if="relatedProducts.length" class="related-products">
       <h2>Produits similaires</h2>
       <div class="related-grid">
-        <RouterLink 
-          v-for="relatedProduct in relatedProducts" 
-          :key="relatedProduct.id"
-          :to="`/produit/${relatedProduct.slug}`"
-          class="related-card"
+        <RouterLink
+            v-for="relatedProduct in relatedProducts"
+            :key="relatedProduct.id"
+            :to="`/produit/${relatedProduct.slug}`"
+            class="related-card"
         >
           <div class="related-image">
             <img :src="relatedProduct.imageUrl" :alt="relatedProduct.name" />
@@ -572,6 +472,59 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+
+.notes-section {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.notes-section label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  color: #333;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.notes-section label i {
+  color: #1b5e20;
+  font-size: 0.9rem;
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 100px;
+  max-height: 300px;
+  padding: 0.9rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: white;
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+  line-height: 1.6;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.notes-textarea:focus {
+  border-color: #1b5e20;
+  box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
+}
+
+.notes-textarea::placeholder {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+
 .page {
   max-width: 1400px;
   margin: 0 auto;
@@ -584,7 +537,7 @@ onMounted(async () => {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Fil d'Ariane modernisé */
+/* Fil d'Ariane */
 .breadcrumb {
   display: flex;
   gap: 0.75rem;
@@ -603,21 +556,11 @@ onMounted(async () => {
   transition: color 0.2s ease;
 }
 
-.breadcrumb a:hover {
-  color: #1b5e20;
-}
+.breadcrumb a:hover { color: #1b5e20; }
+.breadcrumb .separator { color: #ccc; font-size: 1.2rem; }
+.breadcrumb .current { color: #333; font-weight: 500; }
 
-.breadcrumb .separator {
-  color: #ccc;
-  font-size: 1.2rem;
-}
-
-.breadcrumb .current {
-  color: #333;
-  font-weight: 500;
-}
-
-/* Container principal avec animations */
+/* Container principal */
 .product-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -625,7 +568,7 @@ onMounted(async () => {
   margin-bottom: 5rem;
 }
 
-/* Galerie d'images améliorée */
+/* Galerie */
 .product-gallery {
   position: sticky;
   top: 100px;
@@ -680,25 +623,23 @@ onMounted(async () => {
   transition: transform 0.5s ease;
 }
 
-.main-image:hover img {
-  transform: scale(1.08);
-}
+.main-image:hover img { transform: scale(1.08); }
 
 .image-zoom-indicator {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
   background: rgba(255, 255, 255, 0.95);
-  padding: 0.6rem;
+  padding: 0.6rem 0.7rem;
   border-radius: 50%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   opacity: 0;
   transition: opacity 0.3s ease;
+  color: #1b5e20;
+  font-size: 1rem;
 }
 
-.main-image:hover .image-zoom-indicator {
-  opacity: 1;
-}
+.main-image:hover .image-zoom-indicator { opacity: 1; }
 
 .thumbnails {
   display: grid;
@@ -715,22 +656,9 @@ onMounted(async () => {
   transition: all 0.3s ease;
   padding: 0;
   background: #f8f9fa;
-  position: relative;
 }
 
-.thumbnail::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  transition: background 0.3s ease;
-}
-
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.thumbnail img { width: 100%; height: 100%; object-fit: cover; }
 
 .thumbnail:hover {
   border-color: #1b5e20;
@@ -742,10 +670,8 @@ onMounted(async () => {
   box-shadow: 0 4px 16px rgba(27, 94, 32, 0.3);
 }
 
-/* Informations produit stylisées */
-.product-header {
-  margin-bottom: 1.5rem;
-}
+/* Infos produit */
+.product-header { margin-bottom: 1.5rem; }
 
 .product-info h1 {
   font-size: 2.5rem;
@@ -777,21 +703,9 @@ onMounted(async () => {
   margin-bottom: 1.5rem;
 }
 
-.stars {
-  display: flex;
-  gap: 0.2rem;
-}
-
-.star {
-  color: #ffc107;
-  font-size: 1.3rem;
-}
-
-.reviews-count {
-  color: #666;
-  font-size: 0.95rem;
-  font-weight: 500;
-}
+.stars { display: flex; gap: 0.2rem; }
+.star { color: #ffc107; font-size: 1.3rem; }
+.reviews-count { color: #666; font-size: 0.95rem; font-weight: 500; }
 
 .price-section {
   display: flex;
@@ -802,11 +716,7 @@ onMounted(async () => {
   border-bottom: 2px solid #f0f0f0;
 }
 
-.price-container {
-  display: flex;
-  align-items: baseline;
-  gap: 1rem;
-}
+.price-container { display: flex; align-items: baseline; gap: 1rem; }
 
 .current-price {
   font-size: 3rem;
@@ -830,7 +740,7 @@ onMounted(async () => {
   font-weight: 500;
 }
 
-/* Highlights section */
+/* Highlights */
 .highlights {
   background: linear-gradient(135deg, #f8fdf9 0%, #e8f5e9 100%);
   border-radius: 16px;
@@ -846,15 +756,10 @@ onMounted(async () => {
   color: #2c3e50;
 }
 
-.highlight-item svg {
-  color: #1b5e20;
-  flex-shrink: 0;
-}
+.highlight-item i { color: #1b5e20; font-size: 1.1rem; flex-shrink: 0; }
 
-/* Indicateur de stock moderne */
-.stock-info {
-  margin-bottom: 2rem;
-}
+/* Stock */
+.stock-info { margin-bottom: 2rem; }
 
 .stock-indicator {
   display: inline-flex;
@@ -866,25 +771,14 @@ onMounted(async () => {
   font-size: 0.95rem;
 }
 
-.in-stock {
-  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
-  color: #155724;
-}
+.stock-indicator i { font-size: 1.05rem; }
 
-.low-stock {
-  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
-  color: #856404;
-}
+.in-stock { background: linear-gradient(135deg, #d4edda, #c3e6cb); color: #155724; }
+.low-stock { background: linear-gradient(135deg, #fff3cd, #ffeaa7); color: #856404; }
+.out-stock { background: linear-gradient(135deg, #f8d7da, #f5c6cb); color: #721c24; }
 
-.out-stock {
-  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
-  color: #721c24;
-}
-
-/* Certifications modernes */
-.certifications-modern {
-  margin-bottom: 2rem;
-}
+/* Certifications */
+.certifications-modern { margin-bottom: 2rem; }
 
 .cert-title {
   font-size: 0.9rem;
@@ -895,11 +789,7 @@ onMounted(async () => {
   letter-spacing: 0.5px;
 }
 
-.cert-list {
-  display: flex;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-}
+.cert-list { display: flex; gap: 0.8rem; flex-wrap: wrap; }
 
 .cert-item {
   display: flex;
@@ -922,11 +812,6 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
 }
 
-.cert-item svg {
-  width: 16px;
-  height: 16px;
-}
-
 .description {
   font-size: 1.1rem;
   line-height: 1.8;
@@ -934,7 +819,7 @@ onMounted(async () => {
   margin-bottom: 2rem;
 }
 
-/* Section d'achat */
+/* Section achat */
 .purchase-section {
   background: #f8f9fa;
   padding: 2rem;
@@ -942,9 +827,7 @@ onMounted(async () => {
   margin-bottom: 2rem;
 }
 
-.quantity-section {
-  margin-bottom: 1.5rem;
-}
+.quantity-section { margin-bottom: 1.5rem; }
 
 .quantity-section label {
   display: block;
@@ -969,7 +852,7 @@ onMounted(async () => {
   border: 2px solid #e2e8f0;
   background: white;
   color: #2E7D32;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -987,10 +870,7 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
-.qty-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+.qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .quantity-controls input {
   width: 80px;
@@ -1011,11 +891,8 @@ onMounted(async () => {
   box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.1);
 }
 
-/* Boutons d'action */
-.actions {
-  display: flex;
-  gap: 1rem;
-}
+/* Boutons */
+.actions { display: flex; gap: 1rem; }
 
 .add-cart {
   flex: 1;
@@ -1034,6 +911,8 @@ onMounted(async () => {
   gap: 0.8rem;
   box-shadow: 0 4px 16px rgba(27, 94, 32, 0.3);
 }
+
+.add-cart i { font-size: 1.05rem; }
 
 .add-cart:hover:not(:disabled) {
   transform: translateY(-3px);
@@ -1068,6 +947,7 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   color: #666;
+  font-size: 1.1rem;
 }
 
 .wishlist-btn:hover {
@@ -1077,7 +957,7 @@ onMounted(async () => {
   transform: scale(1.05);
 }
 
-/* Meta informations */
+/* Meta */
 .product-meta {
   background: white;
   border: 2px solid #f0f0f0;
@@ -1093,19 +973,16 @@ onMounted(async () => {
   padding: 1rem 0;
 }
 
-.meta-item:not(:last-child) {
-  border-bottom: 1px solid #f0f0f0;
-}
+.meta-item:not(:last-child) { border-bottom: 1px solid #f0f0f0; }
 
-.meta-item svg {
+.meta-item > i {
   color: #1b5e20;
   flex-shrink: 0;
-  margin-top: 0.2rem;
+  margin-top: 0.25rem;
+  font-size: 1rem;
 }
 
-.meta-item div {
-  flex: 1;
-}
+.meta-item div { flex: 1; }
 
 .meta-item strong {
   display: block;
@@ -1115,12 +992,9 @@ onMounted(async () => {
   font-size: 0.9rem;
 }
 
-.meta-item span {
-  color: #666;
-  line-height: 1.6;
-}
+.meta-item span { color: #666; line-height: 1.6; }
 
-/* Vendor section */
+/* Vendeur */
 .vendor-section {
   background: linear-gradient(135deg, #f8fdf9 0%, #e8f5e9 100%);
   border-radius: 16px;
@@ -1137,9 +1011,7 @@ onMounted(async () => {
   color: #1b5e20;
 }
 
-.vendor-header svg {
-  flex-shrink: 0;
-}
+.vendor-header i { font-size: 1.2rem; flex-shrink: 0; }
 
 .vendor-header h3 {
   margin: 0;
@@ -1173,11 +1045,7 @@ onMounted(async () => {
   background: #f8f9fa;
 }
 
-.vendor-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+.vendor-image img { width: 100%; height: 100%; object-fit: cover; }
 
 .vendor-info-content {
   flex: 1;
@@ -1193,12 +1061,7 @@ onMounted(async () => {
   font-weight: 700;
 }
 
-.vendor-description {
-  margin: 0;
-  color: #555;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
+.vendor-description { margin: 0; color: #555; font-size: 0.95rem; line-height: 1.6; }
 
 .vendor-location {
   display: flex;
@@ -1208,16 +1071,9 @@ onMounted(async () => {
   font-size: 0.9rem;
 }
 
-.vendor-location svg {
-  color: #1b5e20;
-  flex-shrink: 0;
-}
+.vendor-location i { color: #1b5e20; flex-shrink: 0; }
 
-.vendor-labels {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
+.vendor-labels { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 
 .vendor-label {
   background: #e8f5e9;
@@ -1241,18 +1097,15 @@ onMounted(async () => {
   width: fit-content;
 }
 
-.vendor-link:hover {
-  gap: 0.8rem;
-}
+.vendor-link:hover { gap: 0.8rem; }
 
-.vendor-link svg {
+.vendor-link i {
   flex-shrink: 0;
   transition: transform 0.3s ease;
+  font-size: 0.85rem;
 }
 
-.vendor-link:hover svg {
-  transform: translateX(4px);
-}
+.vendor-link:hover i { transform: translateX(4px); }
 
 /* Trust badges */
 .trust-badges {
@@ -1276,13 +1129,8 @@ onMounted(async () => {
   transition: transform 0.3s ease;
 }
 
-.trust-item:hover {
-  transform: translateY(-4px);
-}
-
-.trust-item svg {
-  color: #1b5e20;
-}
+.trust-item:hover { transform: translateY(-4px); }
+.trust-item i { color: #1b5e20; font-size: 1.4rem; }
 
 .trust-item span {
   font-size: 0.85rem;
@@ -1291,7 +1139,7 @@ onMounted(async () => {
   line-height: 1.4;
 }
 
-/* Tabs modernes */
+/* Tabs */
 .product-details {
   background: white;
   border-radius: 20px;
@@ -1334,27 +1182,12 @@ onMounted(async () => {
   transition: transform 0.3s ease;
 }
 
-.tab-btn:hover {
-  color: #1b5e20;
-  background: rgba(27, 94, 32, 0.05);
-}
+.tab-btn:hover { color: #1b5e20; background: rgba(27, 94, 32, 0.05); }
+.tab-btn.active { color: #1b5e20; background: white; }
+.tab-btn.active::after { transform: scaleX(1); }
 
-.tab-btn.active {
-  color: #1b5e20;
-  background: white;
-}
-
-.tab-btn.active::after {
-  transform: scaleX(1);
-}
-
-.tab-content {
-  padding: 3rem;
-}
-
-.tab-panel {
-  animation: fadeIn 0.4s ease;
-}
+.tab-content { padding: 3rem; }
+.tab-panel { animation: fadeIn 0.4s ease; }
 
 .tab-panel h3 {
   color: #2c3e50;
@@ -1377,7 +1210,6 @@ onMounted(async () => {
   margin-bottom: 2rem;
 }
 
-/* Key features list */
 .key-features {
   background: #f8fdf9;
   padding: 2rem;
@@ -1385,11 +1217,7 @@ onMounted(async () => {
   border-left: 4px solid #1b5e20;
 }
 
-.features-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+.features-list { list-style: none; padding: 0; margin: 0; }
 
 .features-list li {
   display: flex;
@@ -1400,17 +1228,10 @@ onMounted(async () => {
   font-size: 1.05rem;
 }
 
-.features-list svg {
-  color: #1b5e20;
-  flex-shrink: 0;
-}
+.features-list i { color: #1b5e20; flex-shrink: 0; font-size: 0.9rem; }
 
 /* Composition */
-.composition-content {
-  font-size: 1.1rem;
-  line-height: 1.9;
-  color: #555;
-}
+.composition-content { font-size: 1.1rem; line-height: 1.9; color: #555; }
 
 .allergens-info {
   margin-top: 2rem;
@@ -1422,10 +1243,8 @@ onMounted(async () => {
   font-size: 0.95rem;
 }
 
-/* Nutrition table */
-.nutrition-info {
-  max-width: 600px;
-}
+/* Nutrition */
+.nutrition-info { max-width: 600px; }
 
 .nutrition-desc {
   font-size: 1.1rem;
@@ -1461,15 +1280,10 @@ onMounted(async () => {
   color: #555;
 }
 
-.nutrition-table tbody tr:hover {
-  background: #f8f9fa;
-}
+.nutrition-table tbody tr:hover { background: #f8f9fa; }
+.nutrition-table tbody tr:last-child td { border-bottom: none; }
 
-.nutrition-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Reviews section */
+/* Reviews */
 .reviews-summary {
   background: linear-gradient(135deg, #f8fdf9 0%, #e8f5e9 100%);
   padding: 2rem;
@@ -1477,11 +1291,7 @@ onMounted(async () => {
   margin-bottom: 2rem;
 }
 
-.rating-overview {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
+.rating-overview { display: flex; align-items: center; gap: 2rem; }
 
 .rating-score {
   font-size: 4rem;
@@ -1490,27 +1300,11 @@ onMounted(async () => {
   line-height: 1;
 }
 
-.stars-large {
-  display: flex;
-  gap: 0.3rem;
-  margin-bottom: 0.5rem;
-}
+.stars-large { display: flex; gap: 0.3rem; margin-bottom: 0.5rem; }
+.stars-large .star { color: #ffc107; font-size: 1.8rem; }
+.rating-details p { color: #666; font-size: 0.95rem; }
 
-.stars-large .star {
-  color: #ffc107;
-  font-size: 1.8rem;
-}
-
-.rating-details p {
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.reviews-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
+.reviews-list { display: flex; flex-direction: column; gap: 1.5rem; }
 
 .review-item {
   background: white;
@@ -1532,11 +1326,7 @@ onMounted(async () => {
   margin-bottom: 1rem;
 }
 
-.reviewer-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+.reviewer-info { display: flex; align-items: center; gap: 1rem; }
 
 .avatar {
   width: 48px;
@@ -1551,32 +1341,13 @@ onMounted(async () => {
   font-size: 1.1rem;
 }
 
-.reviewer-info strong {
-  display: block;
-  color: #2c3e50;
-  margin-bottom: 0.3rem;
-}
+.reviewer-info strong { display: block; color: #2c3e50; margin-bottom: 0.3rem; }
+.review-stars { color: #ffc107; font-size: 0.95rem; }
+.review-date { color: #999; font-size: 0.85rem; }
+.review-text { color: #555; line-height: 1.7; font-size: 1.05rem; }
 
-.review-stars {
-  color: #ffc107;
-  font-size: 0.95rem;
-}
-
-.review-date {
-  color: #999;
-  font-size: 0.85rem;
-}
-
-.review-text {
-  color: #555;
-  line-height: 1.7;
-  font-size: 1.05rem;
-}
-
-/* Related products */
-.related-products {
-  margin-top: 4rem;
-}
+/* Related */
+.related-products { margin-top: 4rem; }
 
 .related-products h2 {
   font-size: 2rem;
@@ -1606,12 +1377,7 @@ onMounted(async () => {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
-.related-image {
-  width: 100%;
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: #f8f9fa;
-}
+.related-image { width: 100%; aspect-ratio: 1; overflow: hidden; background: #f8f9fa; }
 
 .related-image img {
   width: 100%;
@@ -1620,13 +1386,9 @@ onMounted(async () => {
   transition: transform 0.3s ease;
 }
 
-.related-card:hover .related-image img {
-  transform: scale(1.1);
-}
+.related-card:hover .related-image img { transform: scale(1.1); }
 
-.related-info {
-  padding: 1.5rem;
-}
+.related-info { padding: 1.5rem; }
 
 .related-info h4 {
   font-size: 1.1rem;
@@ -1635,14 +1397,9 @@ onMounted(async () => {
   font-weight: 600;
 }
 
-.related-price {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #1b5e20;
-  margin: 0;
-}
+.related-price { font-size: 1.3rem; font-weight: 700; color: #1b5e20; margin: 0; }
 
-/* Loading state */
+/* Loading */
 .loading {
   display: flex;
   flex-direction: column;
@@ -1666,98 +1423,31 @@ onMounted(async () => {
   100% { transform: rotate(360deg); }
 }
 
-.loading p {
-  font-size: 1.2rem;
-  color: #666;
-  font-weight: 500;
-}
+.loading p { font-size: 1.2rem; color: #666; font-weight: 500; }
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .product-container {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-
-  .product-gallery {
-    position: static;
-  }
-
-  .product-info h1 {
-    font-size: 2rem;
-  }
-
-  .current-price {
-    font-size: 2.5rem;
-  }
-
-  .trust-badges {
-    grid-template-columns: 1fr;
-  }
-
-  .tab-content {
-    padding: 2rem 1.5rem;
-  }
+  .product-container { grid-template-columns: 1fr; gap: 3rem; }
+  .product-gallery { position: static; }
+  .product-info h1 { font-size: 2rem; }
+  .current-price { font-size: 2.5rem; }
+  .trust-badges { grid-template-columns: 1fr; }
+  .tab-content { padding: 2rem 1.5rem; }
 }
 
 @media (max-width: 768px) {
-  .page {
-    padding: 1rem;
-  }
-
-  .breadcrumb {
-    font-size: 0.8rem;
-    gap: 0.5rem;
-  }
-
-  .product-info h1 {
-    font-size: 1.6rem;
-  }
-
-  .current-price {
-    font-size: 2rem;
-  }
-
-  .price-section {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .actions {
-    flex-direction: column;
-  }
-
-  .wishlist-btn {
-    width: 100%;
-  }
-
-  .tabs-header {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-  }
-
-  .tab-btn {
-    font-size: 0.9rem;
-    padding: 1.2rem 1.5rem;
-  }
-
-  .related-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .rating-overview {
-    flex-direction: column;
-    text-align: center;
-    gap: 1rem;
-  }
-
-  .vendor-card {
-    flex-direction: column;
-  }
-
-  .vendor-image {
-    width: 100%;
-    height: 200px;
-  }
+  .page { padding: 1rem; }
+  .breadcrumb { font-size: 0.8rem; gap: 0.5rem; }
+  .product-info h1 { font-size: 1.6rem; }
+  .current-price { font-size: 2rem; }
+  .price-section { flex-direction: column; gap: 1rem; }
+  .actions { flex-direction: column; }
+  .wishlist-btn { width: 100%; }
+  .tabs-header { flex-wrap: nowrap; overflow-x: auto; }
+  .tab-btn { font-size: 0.9rem; padding: 1.2rem 1.5rem; }
+  .related-grid { grid-template-columns: 1fr; }
+  .rating-overview { flex-direction: column; text-align: center; gap: 1rem; }
+  .vendor-card { flex-direction: column; }
+  .vendor-image { width: 100%; height: 200px; }
 }
 </style>
