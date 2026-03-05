@@ -39,6 +39,11 @@ export interface VendorLoginData {
 const STORAGE_KEY = 'greennoble_vendor'
 const VENDORS_KEY = 'greennoble_vendors'
 
+// Émettre un événement custom pour notifier les changements d'authentification vendeur
+const emitVendorAuthChange = () => {
+  window.dispatchEvent(new CustomEvent('vendor-auth-change'))
+}
+
 // Stockage simulé des vendeurs
 const getStoredVendors = (): Map<string, { password: string; vendor: Vendor }> => {
   const stored = localStorage.getItem(VENDORS_KEY)
@@ -107,6 +112,7 @@ export const registerVendor = async (data: VendorRegisterData): Promise<{ succes
     saveVendors(vendors)
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(vendor))
+    emitVendorAuthChange()
     return { success: true, vendor }
   } catch (error) {
     return { success: false, error: 'Une erreur est survenue' }
@@ -128,6 +134,7 @@ export const loginVendor = async (data: VendorLoginData): Promise<{ success: boo
     }
 
     localStorage.setItem(STORAGE_KEY, JSON.stringify(vendorData.vendor))
+    emitVendorAuthChange()
     return { success: true, vendor: vendorData.vendor }
   } catch (error) {
     return { success: false, error: 'Une erreur est survenue' }
@@ -137,6 +144,7 @@ export const loginVendor = async (data: VendorLoginData): Promise<{ success: boo
 // Déconnexion vendeur
 export const logoutVendor = (): void => {
   localStorage.removeItem(STORAGE_KEY)
+  emitVendorAuthChange()
 }
 
 // Mettre à jour le profil vendeur

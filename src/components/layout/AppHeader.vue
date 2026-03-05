@@ -13,7 +13,7 @@
         <RouterLink to="/produits" class="nav-link">Produits</RouterLink>
         <RouterLink to="/vendeurs" class="nav-link">Vendeurs</RouterLink>
         <RouterLink to="/faq" class="nav-link">FAQ</RouterLink>
-        <RouterLink to="/vendeur/connexion" class="nav-link vendor-link">
+        <RouterLink :to="vendor ? '/vendeur/dashboard' : '/vendeur/connexion'" class="nav-link vendor-link">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 7h-9M14 17H5M17 12H3M12 2L2 7l10 5 10-5-10-5z"/>
           </svg>
@@ -118,9 +118,11 @@ import {ref, onMounted, onUnmounted} from 'vue'
 import {RouterLink} from 'vue-router'
 import {useCart} from '../../services/cart'
 import {getCurrentUser, type User} from '../../services/auth'
+import {getCurrentVendor, type Vendor} from '../../services/vendorAuth'
 
 const {cartCount} = useCart()
 const user = ref<User | null>(null)
+const vendor = ref<Vendor | null>(null)
 const menuOpen = ref(false)
 
 function openMenu() {
@@ -137,15 +139,26 @@ function handleKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') closeMenu()
 }
 
+const updateUser = () => {
+  user.value = getCurrentUser()
+  vendor.value = getCurrentVendor()
+}
+
 onMounted(() => {
   user.value = getCurrentUser()
-  window.addEventListener('storage', () => {
-    user.value = getCurrentUser()
-  })
+  vendor.value = getCurrentVendor()
+  // Événement storage (pour les autres onglets)
+  window.addEventListener('storage', updateUser)
+  // Événements custom (pour le même onglet)
+  window.addEventListener('auth-change', updateUser)
+  window.addEventListener('vendor-auth-change', updateUser)
   window.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
+  window.removeEventListener('storage', updateUser)
+  window.removeEventListener('auth-change', updateUser)
+  window.removeEventListener('vendor-auth-change', updateUser)
   window.removeEventListener('keydown', handleKeydown)
   document.body.style.overflow = ''
 })

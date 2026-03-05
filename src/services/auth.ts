@@ -27,6 +27,11 @@ export interface LoginData {
 const STORAGE_KEY = 'greennoble_user'
 const USERS_KEY = 'greennoble_users'
 
+// Émettre un événement custom pour notifier les changements d'authentification
+const emitAuthChange = () => {
+  window.dispatchEvent(new CustomEvent('auth-change'))
+}
+
 // Stockage simulé des utilisateurs (en production, utiliser une vraie API)
 const getStoredUsers = (): Map<string, { password: string; user: User }> => {
   const stored = localStorage.getItem(USERS_KEY)
@@ -92,6 +97,7 @@ export const register = async (data: RegisterData): Promise<{ success: boolean; 
 
     // Connecter automatiquement
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
+    emitAuthChange()
 
     return { success: true, user }
   } catch (error) {
@@ -115,6 +121,7 @@ export const login = async (data: LoginData): Promise<{ success: boolean; error?
 
     // Connexion réussie
     localStorage.setItem(STORAGE_KEY, JSON.stringify(userRecord.user))
+    emitAuthChange()
 
     return { success: true, user: userRecord.user }
   } catch (error) {
@@ -125,6 +132,7 @@ export const login = async (data: LoginData): Promise<{ success: boolean; error?
 // Déconnexion
 export const logout = (): void => {
   localStorage.removeItem(STORAGE_KEY)
+  emitAuthChange()
 }
 
 // Mettre à jour le profil
