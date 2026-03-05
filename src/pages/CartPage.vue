@@ -1,18 +1,37 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useCart } from '../services/cart'
 import { isAuthenticated } from '../services/auth'
 
 const router = useRouter()
-const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart } = useCart()
+const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart, updateNotes } = useCart()
 
 onMounted(() => {
-  // Vérifier si l'utilisateur est connecté
   if (!isAuthenticated()) {
     router.push('/connexion')
   }
 })
+
+// --- Édition des notes ---
+const editingNoteId = ref<string | null>(null)
+const editingNoteValue = ref('')
+
+const startEditNote = (productId: string, currentNote: string) => {
+  editingNoteId.value = productId
+  editingNoteValue.value = currentNote || ''
+}
+
+const confirmEditNote = (productId: string) => {
+  updateNotes(productId, editingNoteValue.value)
+  editingNoteId.value = null
+}
+
+const cancelEditNote = () => {
+  editingNoteId.value = null
+  editingNoteValue.value = ''
+}
+// -------------------------
 
 const increaseQuantity = (productId: string, currentQuantity: number) => {
   updateQuantity(productId, currentQuantity + 1)
@@ -41,11 +60,7 @@ const formatPrice = (price: number) => {
       <!-- Panier vide -->
       <div v-if="cartItems.length === 0" class="empty-cart">
         <div class="empty-icon">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <circle cx="9" cy="21" r="1"></circle>
-            <circle cx="20" cy="21" r="1"></circle>
-            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-          </svg>
+          <i class="fas fa-shopping-cart"></i>
         </div>
         <h2>Votre panier est vide</h2>
         <p>Découvrez nos produits locaux et bio</p>
@@ -67,6 +82,49 @@ const formatPrice = (price: number) => {
                 {{ item.product.name }}
               </RouterLink>
               <p class="item-category">{{ item.product.category }}</p>
+
+              <!-- Notes éditables -->
+              <div class="item-notes-wrapper">
+                <!-- Mode lecture -->
+                <div
+                    v-if="editingNoteId !== item.product.id"
+                    class="item-notes-display"
+                    @click="startEditNote(item.product.id, item.notes)"
+                    :title="item.notes ? 'Cliquer pour modifier' : 'Cliquer pour ajouter une consigne'"
+                >
+                  <span v-if="item.notes" class="item-notes-text">
+                    <i class="fas fa-comment-alt"></i>
+                    {{ item.notes }}
+                  </span>
+                  <span v-else class="item-notes-placeholder">
+                    <i class="fas fa-pen"></i>
+                    Ajouter une consigne...
+                  </span>
+                </div>
+
+                <!-- Mode édition -->
+                <div v-else class="item-notes-edit">
+                  <textarea
+                      v-model="editingNoteValue"
+                      class="notes-textarea"
+                      placeholder="Instructions particulières pour le vendeur..."
+                      rows="2"
+                      @keydown.enter.prevent="confirmEditNote(item.product.id)"
+                      @keydown.esc="cancelEditNote"
+                  />
+                  <div class="notes-actions">
+                    <button class="btn-confirm-note" @click="confirmEditNote(item.product.id)">
+                      <i class="fas fa-check"></i>
+                      Confirmer
+                    </button>
+                    <button class="btn-cancel-note" @click="cancelEditNote">
+                      <i class="fas fa-times"></i>
+                      Annuler
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <div class="item-meta">
                 <span v-if="item.product.vendorId" class="vendor-badge">
                   📍 Vendeur local
@@ -78,24 +136,19 @@ const formatPrice = (price: number) => {
             </div>
 
             <div class="item-quantity">
-              <button 
-                @click="decreaseQuantity(item.product.id, item.quantity)"
-                class="qty-btn"
-                :disabled="item.quantity <= 1"
-              > -
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
+              <button
+                  @click="decreaseQuantity(item.product.id, item.quantity)"
+                  class="qty-btn"
+                  :disabled="item.quantity <= 1"
+              >
+                <i class="fas fa-minus"></i>
               </button>
               <span class="qty-value">{{ item.quantity }}</span>
-              <button 
-                @click="increaseQuantity(item.product.id, item.quantity)"
-                class="qty-btn"
-              > +
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
+              <button
+                  @click="increaseQuantity(item.product.id, item.quantity)"
+                  class="qty-btn"
+              >
+                <i class="fas fa-plus"></i>
               </button>
             </div>
 
@@ -105,12 +158,7 @@ const formatPrice = (price: number) => {
             </div>
 
             <button @click="removeFromCart(item.product.id)" class="btn-remove">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                <line x1="10" y1="11" x2="10" y2="17"></line>
-                <line x1="14" y1="11" x2="14" y2="17"></line>
-              </svg>
+              <i class="fas fa-trash-alt"></i>
             </button>
           </div>
         </div>
@@ -119,7 +167,7 @@ const formatPrice = (price: number) => {
         <div class="cart-summary">
           <div class="summary-card">
             <h2>Récapitulatif</h2>
-            
+
             <div class="summary-line">
               <span>Articles ({{ cartItems.length }})</span>
               <span>{{ formatPrice(cartTotal) }}</span>
@@ -149,23 +197,15 @@ const formatPrice = (price: number) => {
           <!-- Garanties -->
           <div class="guarantees">
             <div class="guarantee-item">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-              </svg>
+              <i class="fas fa-shield-alt"></i>
               <span>Paiement sécurisé</span>
             </div>
             <div class="guarantee-item">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <polyline points="12 6 12 12 16 14"></polyline>
-              </svg>
+              <i class="fas fa-clock"></i>
               <span>Livraison rapide</span>
             </div>
             <div class="guarantee-item">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
+              <i class="fas fa-check-circle"></i>
               <span>Produits garantis</span>
             </div>
           </div>
@@ -206,6 +246,7 @@ const formatPrice = (price: number) => {
 
 .empty-icon {
   color: #cbd5e0;
+  font-size: 5rem;
   margin-bottom: 1.5rem;
 }
 
@@ -287,7 +328,7 @@ const formatPrice = (price: number) => {
 .item-details {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .item-name {
@@ -305,6 +346,127 @@ const formatPrice = (price: number) => {
 .item-category {
   color: #718096;
   font-size: 0.9rem;
+}
+
+/* Notes éditables */
+.item-notes-wrapper {
+  margin: 0.1rem 0;
+}
+
+.item-notes-display {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 0.3rem 0.55rem;
+  border: 1px dashed transparent;
+  transition: all 0.2s ease;
+  max-width: 100%;
+}
+
+.item-notes-display:hover {
+  background: #f0fff4;
+  border-color: #68d391;
+}
+
+.item-notes-text {
+  font-size: 0.88rem;
+  color: #2d3748;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  line-height: 1.45;
+}
+
+.item-notes-text i {
+  color: #2E7D32;
+  margin-top: 0.15rem;
+  flex-shrink: 0;
+  font-size: 0.78rem;
+}
+
+.item-notes-placeholder {
+  font-size: 0.85rem;
+  color: #a0aec0;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.item-notes-placeholder i {
+  font-size: 0.75rem;
+}
+
+.item-notes-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid #2E7D32;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: #2d3748;
+  background: white;
+  resize: vertical;
+  outline: none;
+  line-height: 1.5;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+  box-sizing: border-box;
+  min-height: 60px;
+  max-height: 160px;
+}
+
+.notes-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-confirm-note {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #2E7D32;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-confirm-note:hover {
+  background: #1b5e20;
+  transform: translateY(-1px);
+}
+
+.btn-cancel-note {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  color: #718096;
+  border: 1px solid #e2e8f0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel-note:hover {
+  background: #fff5f5;
+  color: #e53e3e;
+  border-color: #e53e3e;
 }
 
 .item-meta {
@@ -342,6 +504,8 @@ const formatPrice = (price: number) => {
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
+  color: #2E7D32;
+  font-size: 0.75rem;
 }
 
 .qty-btn:hover:not(:disabled) {
@@ -386,6 +550,7 @@ const formatPrice = (price: number) => {
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 6px;
+  font-size: 1rem;
   transition: all 0.2s ease;
 }
 
@@ -505,9 +670,12 @@ const formatPrice = (price: number) => {
   border-bottom: 1px solid #e2e8f0;
 }
 
-.guarantee-item svg {
+.guarantee-item i {
   color: #38a169;
+  font-size: 1.2rem;
   flex-shrink: 0;
+  width: 24px;
+  text-align: center;
 }
 
 @media (max-width: 968px) {
@@ -534,4 +702,3 @@ const formatPrice = (price: number) => {
   }
 }
 </style>
-
