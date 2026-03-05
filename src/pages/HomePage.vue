@@ -209,7 +209,7 @@ onMounted(async () => {
 <style scoped>
 .hero {
   position: relative;
-  background-image: url('../assets/anne-preble-SAPvKo12dQE-unsplash.jpg');
+  background-image: url('https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=1600&h=900&fit=crop');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
