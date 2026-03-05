@@ -35,6 +35,7 @@ export interface Product {
     nutritionalInfo: string;
     certifications: string[];
     stock: number;
+    vendor?: Vendor;
 }
 
 // Données mock
@@ -192,14 +193,21 @@ const products: Product[] = [
     }
 ]
 
+const getSafeLocalStorage = (): Storage | null => {
+  if (typeof globalThis === 'undefined' || !('localStorage' in globalThis)) {
+    return null
+  }
+  return globalThis.localStorage
+}
+
 // Fonction pour récupérer les vendeurs du localStorage
-const getVendorsFromStorage = (): Vendor[] => {
-  // Vérifier qu'on est dans le navigateur
-  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+const getVendorsFromStorage = (): Vendor[] | any => {
+  const storage = getSafeLocalStorage()
+  if (!storage) {
     return []
   }
 
-  const stored = localStorage.getItem('greennoble_vendors')
+  const stored = storage.getItem('greennoble_vendors')
   if (!stored) return []
 
   try {
@@ -228,12 +236,12 @@ const getVendorsFromStorage = (): Vendor[] => {
 
 // Fonction pour récupérer les produits du localStorage
 const getProductsFromStorage = (): Product[] => {
-  // Vérifier qu'on est dans le navigateur
-  if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
+  const storage = getSafeLocalStorage()
+  if (!storage) {
     return []
   }
 
-  const stored = localStorage.getItem('greennoble_vendor_products')
+  const stored = storage.getItem('greennoble_vendor_products')
   if (!stored) return []
 
   try {
