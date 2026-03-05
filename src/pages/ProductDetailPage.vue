@@ -3,18 +3,19 @@ import { onMounted, ref, computed } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getProductBySlug, getProducts, getVendorForProduct} from "../services/api.ts";
+import type { Product, Vendor } from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
 import { useCart } from '../services/cart'
 
 const route = useRoute()
-const product = ref<any | null>(null)
-const vendor = ref<any | null>(null)
+const product = ref<Product | null>(null)
+const vendor = ref<Vendor | null>(null)
 const selectedImage = ref(0)
 const quantity = ref(1)
 const activeTab = ref('description')
-const relatedProducts = ref<any[]>([])
+const relatedProducts = ref<Product[]>([])
 
-const { addToCart: addToCartService, isInCart } = useCart()
+const { addToCart: addToCartService } = useCart()
 const showAdded = ref(false)
 
 const selectImage = (index: number) => {
@@ -26,7 +27,7 @@ const selectTab = (tab: string) => {
 }
 
 const addToCart = () => {
-  if (!product.value.stock) return
+  if (!product.value || !product.value.stock) return
   
   addToCartService(product.value, quantity.value)
   showAdded.value = true
@@ -52,7 +53,7 @@ const discountPercentage = computed(() => {
 
 const originalPrice = computed(() => {
   if (discountPercentage.value > 0) {
-    return product.value.price / (1 - discountPercentage.value / 100)
+    return product.value && (product.value.price / (1 - discountPercentage.value / 100));
   }
   return null
 })
@@ -73,7 +74,7 @@ onMounted(async () => {
     // Charger les produits similaires
     const allProducts = await getProducts()
     relatedProducts.value = allProducts
-      .filter(p => p.id !== product.value.id && p.category === product.value.category)
+      .filter(p => product.value && ( p.id !== product.value.id && p.category === product.value.category))
       .slice(0, 3)
 
     useHead({

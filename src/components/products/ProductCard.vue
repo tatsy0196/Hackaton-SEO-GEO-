@@ -2,25 +2,18 @@
 import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useCart } from '../../services/cart'
+import type { Product } from '../../services/api'
 
 const props = defineProps<{
-  product: {
-    id: string
-    name: string
-    slug: string
-    price: number
-    discountPrice?: number
-    shortDescription: string
-    imageUrl: string
-  }
+  product: Product
 }>()
 
-const { addToCart, isInCart } = useCart()
+const { addToCart } = useCart()
 const showAdded = ref(false)
 
 const handleAddToCart = (e: Event) => {
   e.preventDefault()
-  addToCart(props.product as any, 1)
+  addToCart(props.product, 1)
   
   showAdded.value = true
   setTimeout(() => {
