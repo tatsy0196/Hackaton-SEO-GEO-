@@ -12,6 +12,9 @@ import LoginPage from "../pages/LoginPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
 import CartPage from "../pages/CartPage.vue";
 import AccountPage from "../pages/AccountPage.vue";
+import VendorLoginPage from "../pages/VendorLoginPage.vue";
+import VendorRegisterPage from "../pages/VendorRegisterPage.vue";
+import VendorDashboardPage from "../pages/VendorDashboardPage.vue";
 
 
 const routes = [
@@ -27,7 +30,10 @@ const routes = [
     { path: '/connexion', name: 'login', component: LoginPage },
     { path: '/inscription', name: 'register', component: RegisterPage },
     { path: '/panier', name: 'cart', component: CartPage },
-    { path: '/compte', name: 'account', component: AccountPage }
+    { path: '/compte', name: 'account', component: AccountPage },
+    { path: '/vendeur/connexion', name: 'vendor-login', component: VendorLoginPage },
+    { path: '/vendeur/inscription', name: 'vendor-register', component: VendorRegisterPage },
+    { path: '/vendeur/dashboard', name: 'vendor-dashboard', component: VendorDashboardPage }
 ]
 
 const router = createRouter({

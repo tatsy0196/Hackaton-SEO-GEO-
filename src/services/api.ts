@@ -192,21 +192,102 @@ const products: Product[] = [
     }
 ]
 
-export const getVendors = async (): Promise<Vendor[]> => vendors
-export const getVendorBySlug = async (slug: string): Promise<Vendor | null> =>
-    vendors.find(v => v.slug === slug) ?? null
+// Fonction pour récupérer les vendeurs du localStorage
+const getVendorsFromStorage = (): Vendor[] => {
+  const stored = localStorage.getItem('greennoble_vendors')
+  if (!stored) return []
 
-export const getProducts = async (): Promise<Product[]> => products
-export const getProductBySlug = async (slug: string): Promise<Product | null> =>
-    products.find(p => p.slug === slug) ?? null
+  try {
+    const vendorsMap = JSON.parse(stored)
+    return Object.values(vendorsMap).map((v: any) => {
+      const vendor = v.vendor
+      return {
+        id: vendor.id,
+        slug: vendor.businessName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-'),
+        name: vendor.businessName,
+        shortDescription: vendor.description || 'Vendeur local écoresponsable',
+        seoDescription: vendor.description,
+        address: vendor.address,
+        postalCode: vendor.postalCode,
+        city: vendor.city,
+        labels: vendor.labels,
+        imageUrl: vendor.imageUrl || 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&h=400&fit=crop',
+        products: []
+      }
+    })
+  } catch (error) {
+    console.error('Erreur chargement vendeurs:', error)
+    return []
+  }
+}
 
-export const getProductsByArrondissement = async (): Promise<Product[]> =>
-    products.filter(p => p.city === 'Grenoble') // Simule un filtre par arrondissement
+// Fonction pour récupérer les produits du localStorage
+const getProductsFromStorage = (): Product[] => {
+  const stored = localStorage.getItem('greennoble_vendor_products')
+  if (!stored) return []
+
+  try {
+    const vendorProducts = JSON.parse(stored)
+    return vendorProducts.map((p: any) => ({
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      price: p.price,
+      discountPrice: p.discountPrice,
+      vendorId: p.vendorId,
+      category: p.category,
+      city: p.city,
+      shortDescription: p.shortDescription,
+      imageUrl: p.imageUrl,
+      images: p.images || [p.imageUrl],
+      longDescription: p.longDescription,
+      weight: p.weight,
+      origin: p.origin,
+      composition: p.composition,
+      conservation: p.conservation,
+      nutritionalInfo: p.nutritionalInfo,
+      certifications: p.certifications,
+      stock: p.stock
+    }))
+  } catch (error) {
+    console.error('Erreur chargement produits:', error)
+    return []
+  }
+}
+
+export const getVendors = async () => {
+  const storageVendors = getVendorsFromStorage()
+  return [...vendors, ...storageVendors]
+}
+
+export const getVendorBySlug = async (slug: string) => {
+  const allVendors = await getVendors()
+  return allVendors.find(v => v.slug === slug) ?? null
+}
+
+export const getProducts = async (): Promise<Product[]> => {
+  const storageProducts = getProductsFromStorage()
+  return [...products, ...storageProducts]
+}
+
+export const getProductBySlug = async (slug: string) => {
+  const allProducts = await getProducts()
+  return allProducts.find(p => p.slug === slug) ?? null
+}
+
+export const getProductsByArrondissement = async () => {
+    const allProducts = await getProducts()
+    return allProducts.filter(p => p.city === 'Grenoble')
+}
 
 // Récupérer le vendeur d'un produit
-export const getVendorForProduct = async (vendorId: string): Promise<Vendor | null> =>
-    vendors.find(v => v.id === vendorId) ?? null
+export const getVendorForProduct = async (vendorId: string): Promise<Vendor | null> => {
+    const allVendors = await getVendors()
+    return allVendors.find(v => v.id === vendorId) ?? null
+}
 
 // Récupérer tous les produits d'un vendeur
-export const getProductsByVendor = async (vendorId: string): Promise<Product[]> =>
-    products.filter(p => p.vendorId === vendorId)
+export const getProductsByVendor = async (vendorId: string): Promise<Product[]> => {
+    const allProducts = await getProducts()
+    return allProducts.filter(p => p.vendorId === vendorId)
+}
