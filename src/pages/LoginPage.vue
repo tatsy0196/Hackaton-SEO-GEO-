@@ -143,8 +143,23 @@ const handleLogin = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-image: url('https://images.unsplash.com/photo-1488459716781-31db52582fe9?q=80&w=2070');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: 2rem;
+  position: relative;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 0;
 }
 
 .login-container {
@@ -152,10 +167,12 @@ const handleLogin = async () => {
   grid-template-columns: 1fr 1fr;
   max-width: 1000px;
   width: 100%;
-  background: white;
+  background: transparent;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .login-card {
@@ -163,6 +180,7 @@ const handleLogin = async () => {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  background: white;
 }
 
 .login-header {
@@ -173,7 +191,7 @@ const handleLogin = async () => {
 .logo-circle {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -245,13 +263,13 @@ const handleLogin = async () => {
 
 .input-wrapper input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #43A047;
+  box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.1);
 }
 
 .btn-submit {
   margin-top: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
   color: white;
   padding: 1rem;
   border: none;
@@ -265,7 +283,7 @@ const handleLogin = async () => {
 
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 20px rgba(46, 125, 50, 0.3);
 }
 
 .btn-submit:disabled {
@@ -301,19 +319,20 @@ const handleLogin = async () => {
 }
 
 .link-register {
-  color: #667eea;
+  color: #2E7D32;
   font-weight: 600;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .link-register:hover {
-  color: #764ba2;
+  color: #43A047;
   text-decoration: underline;
 }
 
 .login-visual {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: transparent;
+  backdrop-filter: blur(10px);
   padding: 3rem;
   display: flex;
   align-items: center;
@@ -325,18 +344,19 @@ const handleLogin = async () => {
 .login-visual::before {
   content: '';
   position: absolute;
-  width: 400px;
-  height: 400px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 50%;
-  top: -100px;
-  right: -100px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(46, 125, 50, 0.25);
+  z-index: 0;
 }
 
 .visual-content {
   position: relative;
   z-index: 1;
   color: white;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .visual-content h2 {
@@ -344,12 +364,14 @@ const handleLogin = async () => {
   font-weight: 800;
   margin-bottom: 1rem;
   line-height: 1.2;
+  color: white;
 }
 
 .visual-content > p {
   font-size: 1.1rem;
-  opacity: 0.95;
+  opacity: 0.98;
   margin-bottom: 2.5rem;
+  color: white;
 }
 
 .visual-features {
@@ -363,11 +385,16 @@ const handleLogin = async () => {
   align-items: center;
   gap: 0.75rem;
   font-size: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.875rem 1.25rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  color: white;
 }
 
 .feature svg {
   flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.3);
   padding: 0.5rem;
   border-radius: 50%;
 }

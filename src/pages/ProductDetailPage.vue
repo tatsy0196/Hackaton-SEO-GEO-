@@ -3,18 +3,19 @@ import { onMounted, ref, computed } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getProductBySlug, getProducts, getVendorForProduct} from "../services/api.ts";
+import type { Product, Vendor } from "../services/api.ts";
 import {trackEvent} from "../services/tracking.ts";
 import { useCart } from '../services/cart'
 
 const route = useRoute()
-const product = ref<any | null>(null)
-const vendor = ref<any | null>(null)
+const product = ref<Product | null>(null)
+const vendor = ref<Vendor | null>(null)
 const selectedImage = ref(0)
 const quantity = ref(1)
 const activeTab = ref('description')
-const relatedProducts = ref<any[]>([])
+const relatedProducts = ref<Product[]>([])
 
-const { addToCart: addToCartService, isInCart } = useCart()
+const { addToCart: addToCartService } = useCart()
 const showAdded = ref(false)
 
 const selectImage = (index: number) => {
@@ -26,7 +27,7 @@ const selectTab = (tab: string) => {
 }
 
 const addToCart = () => {
-  if (!product.value.stock) return
+  if (!product.value || !product.value.stock) return
   
   addToCartService(product.value, quantity.value)
   showAdded.value = true
@@ -52,7 +53,7 @@ const discountPercentage = computed(() => {
 
 const originalPrice = computed(() => {
   if (discountPercentage.value > 0) {
-    return product.value.price / (1 - discountPercentage.value / 100)
+    return product.value && (product.value.price / (1 - discountPercentage.value / 100));
   }
   return null
 })
@@ -73,7 +74,7 @@ onMounted(async () => {
     // Charger les produits similaires
     const allProducts = await getProducts()
     relatedProducts.value = allProducts
-      .filter(p => p.id !== product.value.id && p.category === product.value.category)
+      .filter(p => product.value && ( p.id !== product.value.id && p.category === product.value.category))
       .slice(0, 3)
 
     useHead({
@@ -971,24 +972,25 @@ onMounted(async () => {
 .qty-btn {
   width: 48px;
   height: 48px;
-  border: none;
+  border: 2px solid #e2e8f0;
   background: white;
-  color: #1b5e20;
+  color: #2E7D32;
   font-size: 1.2rem;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .qty-btn:hover:not(:disabled) {
-  background: #1b5e20;
+  background: #2E7D32;
   color: white;
+  border-color: #2E7D32;
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.3);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
 .qty-btn:disabled {
@@ -1000,12 +1002,19 @@ onMounted(async () => {
   width: 80px;
   height: 48px;
   text-align: center;
-  border: none;
-  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 700;
   background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #2d3748;
+}
+
+.quantity-controls input:focus {
+  outline: none;
+  border-color: #43A047;
+  box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.1);
 }
 
 /* Boutons d'action */
