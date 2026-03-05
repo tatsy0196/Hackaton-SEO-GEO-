@@ -2,9 +2,11 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getCurrentUser, logout, updateProfile, type User } from '../services/auth'
+import { getUserOrders, type Order } from '../services/orders'
 
 const router = useRouter()
 const user = ref<User | null>(null)
+const orders = ref<Order[]>([])
 const isEditing = ref(false)
 const message = ref('')
 const error = ref('')
@@ -25,6 +27,9 @@ onMounted(() => {
     router.push('/connexion')
     return
   }
+
+  // Charger les commandes
+  orders.value = getUserOrders()
 
   // Initialiser le formulaire avec les données actuelles
   editForm.value = {
@@ -83,6 +88,26 @@ const formatDate = (dateString: string) => {
     month: 'long',
     day: 'numeric'
   })
+}
+
+const getStatusLabel = (status: Order['status']) => {
+  const labels: Record<Order['status'], string> = {
+    pending: 'En attente',
+    confirmed: 'Confirmée',
+    delivered: 'Livrée',
+    cancelled: 'Annulée'
+  }
+  return labels[status]
+}
+
+const getStatusColor = (status: Order['status']) => {
+  const colors: Record<Order['status'], string> = {
+    pending: '#f59e0b',
+    confirmed: '#2E7D32',
+    delivered: '#0284c7',
+    cancelled: '#dc2626'
+  }
+  return colors[status]
 }
 </script>
 
@@ -204,9 +229,13 @@ const formatDate = (dateString: string) => {
         </div>
 
         <!-- Mes commandes -->
-        <div class="card">
-          <h2>Mes commandes</h2>
-          <div class="empty-state">
+        <div class="card orders-card">
+          <div class="card-header">
+            <h2>Mes commandes</h2>
+            <span v-if="orders.length > 0" class="count-badge">{{ orders.length }}</span>
+          </div>
+
+          <div v-if="orders.length === 0" class="empty-state">
             <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <rect x="3" y="3" width="7" height="7"></rect>
               <rect x="14" y="3" width="7" height="7"></rect>
@@ -215,6 +244,47 @@ const formatDate = (dateString: string) => {
             </svg>
             <p>Aucune commande pour le moment</p>
             <RouterLink to="/produits" class="btn-link">Découvrir les produits</RouterLink>
+          </div>
+
+          <div v-else class="orders-list">
+            <div v-for="order in orders" :key="order.id" class="order-item">
+              <div class="order-header">
+                <div class="order-info">
+                  <span class="order-id">#{{ order.id.slice(-8).toUpperCase() }}</span>
+                  <span class="order-date">{{ formatDate(order.createdAt) }}</span>
+                </div>
+                <span class="order-status" :style="{ background: getStatusColor(order.status) }">
+                  {{ getStatusLabel(order.status) }}
+                </span>
+              </div>
+
+              <div class="order-products">
+                <div v-for="item in order.items.slice(0, 3)" :key="item.product.id" class="order-product">
+                  <img :src="item.product.imageUrl" :alt="item.product.name" />
+                  <div class="product-info">
+                    <span class="product-name">{{ item.product.name }}</span>
+                    <span class="product-qty">x{{ item.quantity }}</span>
+                  </div>
+                </div>
+                <span v-if="order.items.length > 3" class="more-products">
+                  +{{ order.items.length - 3 }} autre{{ order.items.length - 3 > 1 ? 's' : '' }}
+                </span>
+              </div>
+
+              <div class="order-footer">
+                <div class="delivery-info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path v-if="order.deliveryMode === 'pickup'" d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <rect v-else x="1" y="3" width="15" height="13"></rect>
+                  </svg>
+                  <span>{{ order.deliveryMode === 'pickup' ? 'Click & Collect' : 'Point Relais' }}</span>
+                </div>
+                <div class="order-total">
+                  <span>Total :</span>
+                  <strong>{{ order.total.toFixed(2) }} €</strong>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -614,6 +684,162 @@ const formatDate = (dateString: string) => {
   transform: translateX(22px);
 }
 
+/* Styles pour les commandes */
+.orders-card {
+  grid-column: 1 / -1;
+}
+
+.count-badge {
+  background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.order-item {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: all 0.3s;
+}
+
+.order-item:hover {
+  border-color: #2E7D32;
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.1);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.order-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.order-id {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: #2d3748;
+  background: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+}
+
+.order-date {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.order-status {
+  padding: 0.375rem 1rem;
+  border-radius: 20px;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.order-products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.order-product {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.order-product img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.product-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.product-qty {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.more-products {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: 1px dashed #cbd5e0;
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.delivery-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.delivery-info svg {
+  color: #2E7D32;
+}
+
+.order-total {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.order-total strong {
+  font-size: 1.25rem;
+  color: #2E7D32;
+  font-weight: 800;
+}
+
 @media (max-width: 968px) {
   .account-grid {
     grid-template-columns: 1fr;
@@ -635,6 +861,18 @@ const formatDate = (dateString: string) => {
 
   .form-row {
     grid-template-columns: 1fr;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .order-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 }
 </style>
