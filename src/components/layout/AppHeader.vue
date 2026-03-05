@@ -7,16 +7,6 @@
         </svg>
         GreenNoble
       </RouterLink>
-      <nav class="nav">
-        <RouterLink to="/produits" class="nav-link">Produits</RouterLink>
-        <RouterLink to="/vendeurs" class="nav-link">Vendeurs</RouterLink>
-        <RouterLink to="/faq" class="nav-link">FAQ</RouterLink>
-      <RouterLink to="/" class="logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-        </svg>
-        GreenNoble
-      </RouterLink>
 
       <!-- Desktop nav -->
       <nav class="nav desktop-nav">
@@ -122,26 +112,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { RouterLink } from 'vue-router'
-import { useCart } from '../../services/cart'
-import { getCurrentUser, type User } from '../../services/auth'
+import {ref, onMounted, onUnmounted} from 'vue'
+import {RouterLink} from 'vue-router'
+import {useCart} from '../../services/cart'
+import {getCurrentUser, type User} from '../../services/auth'
 
-const { cartCount } = useCart()
-const user = ref<User | null>(null)
-
-onMounted(() => {
-  user.value = getCurrentUser()
-
-  // Écouter les changements d'authentification
-  window.addEventListener('storage', () => {
-    user.value = getCurrentUser()
-  })
-})
-import { useCart } from '../../services/cart'
-import { getCurrentUser, type User } from '../../services/auth'
-
-const { cartCount } = useCart()
+const {cartCount} = useCart()
 const user = ref<User | null>(null)
 const menuOpen = ref(false)
 
@@ -487,6 +463,7 @@ onUnmounted(() => {
 .fade-leave-active {
   transition: opacity 0.25s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
@@ -496,18 +473,29 @@ onUnmounted(() => {
 .slide-leave-active {
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .slide-enter-from,
 .slide-leave-to {
   transform: translateX(100%);
 }
 
 /* ─── Responsive ─────────────────────────────────────────── */
-.mobile-only { display: none; }
+.mobile-only {
+  display: none;
+}
 
 @media (max-width: 768px) {
-  .desktop-only { display: none !important; }
-  .desktop-nav  { display: none !important; }
-  .mobile-only  { display: flex; }
+  .desktop-only {
+    display: none !important;
+  }
+
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
 
   .header-inner {
     padding: 0.875rem 1rem;

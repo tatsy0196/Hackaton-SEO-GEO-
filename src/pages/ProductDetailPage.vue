@@ -18,9 +18,6 @@ const relatedProducts = ref<Product[]>([])
 const { addToCart: addToCartService } = useCart()
 const showAdded = ref(false)
 
-const { addToCart: addToCartService, isInCart } = useCart()
-const showAdded = ref(false)
-
 const selectImage = (index: number) => {
   selectedImage.value = index
 }
