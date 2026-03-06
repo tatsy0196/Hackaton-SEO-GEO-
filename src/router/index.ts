@@ -15,7 +15,7 @@ import AccountPage from "../pages/AccountPage.vue";
 import VendorLoginPage from "../pages/VendorLoginPage.vue";
 import VendorRegisterPage from "../pages/VendorRegisterPage.vue";
 import VendorDashboardPage from "../pages/VendorDashboardPage.vue";
-
+import LegalPage from "../pages/LegalPage.vue";
 
 const routes = [
     { path: '/', name: 'home', component: HomePage },
@@ -33,7 +33,12 @@ const routes = [
     { path: '/compte', name: 'account', component: AccountPage },
     { path: '/vendeur/connexion', name: 'vendor-login', component: VendorLoginPage },
     { path: '/vendeur/inscription', name: 'vendor-register', component: VendorRegisterPage },
-    { path: '/vendeur/dashboard', name: 'vendor-dashboard', component: VendorDashboardPage }
+    { path: '/vendeur/dashboard', name: 'vendor-dashboard', component: VendorDashboardPage },
+    {
+        path: '/mentions-legales',
+        name: 'Legal',
+        component: () => import('../pages/LegalPage.vue')
+    }
 ]
 
 const router = createRouter({
