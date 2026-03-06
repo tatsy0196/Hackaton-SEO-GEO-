@@ -15,7 +15,6 @@ import AccountPage from "../pages/AccountPage.vue";
 import VendorLoginPage from "../pages/VendorLoginPage.vue";
 import VendorRegisterPage from "../pages/VendorRegisterPage.vue";
 import VendorDashboardPage from "../pages/VendorDashboardPage.vue";
-import LegalPage from "../pages/LegalPage.vue";
 
 const routes = [
     { path: '/', name: 'home', component: HomePage },
