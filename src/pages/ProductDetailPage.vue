@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, watch } from 'vue'
 import { useHead } from '@vueuse/head'
 import { useRoute, RouterLink } from 'vue-router'
 import {getProductBySlug, getProducts, getVendorForProduct} from "../services/api.ts";
@@ -58,11 +58,15 @@ const originalPrice = computed(() => {
   return null
 })
 
-onMounted(async () => {
+// Fonction pour charger les données du produit
+const loadProductData = async () => {
   const slug = route.params.slug as string
   product.value = await getProductBySlug(slug)
 
   if (product.value) {
+    // Réinitialiser l'image sélectionnée
+    selectedImage.value = 0
+    
     trackEvent('view_item', {
       product_id: product.value.id,
       price: product.value.price
@@ -88,6 +92,19 @@ onMounted(async () => {
         }
       ]
     })
+  }
+}
+
+onMounted(async () => {
+  await loadProductData()
+})
+
+// Watcher pour recharger les données quand le slug change
+watch(() => route.params.slug, async (newSlug, oldSlug) => {
+  if (newSlug && newSlug !== oldSlug) {
+    // Scroll en haut de la page
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+    await loadProductData()
   }
 })
 </script>
@@ -450,7 +467,7 @@ onMounted(async () => {
         <RouterLink
             v-for="relatedProduct in relatedProducts"
             :key="relatedProduct.id"
-            :to="`/produit/${relatedProduct.slug}`"
+            :to="`/produits/${relatedProduct.slug}`"
             class="related-card"
         >
           <div class="related-image">
@@ -846,7 +863,7 @@ onMounted(async () => {
   width: fit-content;
 }
 
-.qty-btn {
+ qty-btn {
   width: 48px;
   height: 48px;
   border: 2px solid #e2e8f0;
@@ -862,7 +879,7 @@ onMounted(async () => {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-.qty-btn:hover:not(:disabled) {
+ qty-btn:hover:not(:disabled) {
   background: #2E7D32;
   color: white;
   border-color: #2E7D32;
@@ -870,7 +887,7 @@ onMounted(async () => {
   box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
-.qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+ qty-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 .quantity-controls input {
   width: 80px;
