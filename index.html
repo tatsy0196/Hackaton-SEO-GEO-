@@ -6,38 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://analytics.ahrefs.com/analytics.js" data-key="yUQlePqgZ2xtPkycxFfU3g" async></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <!-- CSS bannière -->
-    <style>
-        .cookie-banner {
-            position: fixed; bottom: 0; left: 0; right: 0;
-            background: #333; color: white; padding: 20px; z-index: 9999;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.3); font-family: sans-serif;
-        }
-        .cookie-banner.hidden { display: none; }
-        .cookie-buttons { margin-top: 10px; }
-        .cookie-btn {
-            margin-right: 10px; padding: 8px 16px; border: none;
-            border-radius: 4px; cursor: pointer; font-weight: bold;
-        }
-        .accept { background: #4CAF50; color: white; }
-        .refuse { background: #f44336; color: white; }
-    </style>
-
     <title>hackaton</title>
 </head>
 <body>
-<!-- Bannière cookies -->
-<div id="cookie-banner" class="cookie-banner">
-    <div>
-        <strong>🍪 Cookies analytics</strong><br>
-        Piwik PRO collecte des données d'usage (anonymes si refusées).<br>
-        <small>Refuser = pas de tracking. Accepter = analytics améliorées.</small>
-    </div>
-    <div class="cookie-buttons">
-        <button id="accept-cookies" class="cookie-btn accept">✅ Accepter</button>
-        <button id="refuse-cookies" class="cookie-btn refuse">❌ Refuser</button>
-    </div>
-</div>
 
 <div id="app"></div>
 
@@ -64,97 +35,6 @@
             }(i[c])
         }(window,"ppms",["tm","cm"]);
     })(window, document, 'dataLayer', 'af8c4366-36a9-418e-b296-e20c1072cb39');
-
-    // ✅ CLÉ : Intercepte l'initialisation Piwik PRO pour injecter consent AVANT son auto-init
-    let piwikLoaded = false;
-    const originalPush = window.dataLayer.push;
-
-    window.dataLayer.push = function(...args) {
-        // Détecte chargement Piwik et applique consent IMMÉDIATEMENT
-        if (!piwikLoaded && args[0]?.event?.includes('ppms')) {
-            piwikLoaded = true;
-            applyConsentOnPiwikLoad();
-        }
-        return originalPush.apply(this, args);
-    };
-
-    // Bannière + Consent
-    function initCookieBanner() {
-        const banner = document.getElementById('cookie-banner');
-        const acceptBtn = document.getElementById('accept-cookies');
-        const refuseBtn = document.getElementById('refuse-cookies');
-        const consentKey = 'gc-consent';
-
-        const savedConsent = localStorage.getItem(consentKey);
-        if (savedConsent) {
-            banner.classList.add('hidden');
-            // Applique consent dès disponibilité Piwik
-            window.addEventListener('piwik-ready', () => applyPiwikConsent(savedConsent === 'accepted'));
-            return;
-        }
-
-        acceptBtn.onclick = () => {
-            localStorage.setItem(consentKey, 'accepted');
-            banner.classList.add('hidden');
-            applyPiwikConsent(true);
-        };
-
-        refuseBtn.onclick = () => {
-            localStorage.setItem(consentKey, 'refused');
-            banner.classList.add('hidden');
-            applyPiwikConsent(false);
-        };
-    }
-
-    // Applique consent Piwik PRO (avec init + callbacks)
-    function applyPiwikConsent(accept) {
-        if (!window.ppms?.cm?.api) {
-            console.warn('Piwik pas prêt, retry...');
-            setTimeout(() => applyPiwikConsent(accept), 300);
-            return;
-        }
-
-        const status = accept ? 1 : 0;
-        console.log('🎯 Applique Piwik consent:', status ? 'ACCEPTED' : 'REFUSED');
-
-        // 1. Initialise consents supportés
-        window.ppms.cm.api(
-            'setInitialComplianceSettings',
-            { consents: ['analytics'] },
-            () => console.log('✅ Piwik init OK'),
-            (err) => console.error('❌ Piwik init KO:', err)
-        );
-
-        // 2. Applique statut
-        window.ppms.cm.api(
-            'setComplianceSettings',
-            { consents: { analytics: { status } } },
-            () => {
-                console.log('✅ Piwik consent appliqué:', status);
-                if (status) {
-                    // Test tracking
-                    window.ppms.tm.api('setCustomVariable', 1, 'consent', 'accepted', 'visit');
-                    window.ppms.tm.api('trackPageView');
-                }
-            },
-            (err) => console.error('❌ Piwik consent KO:', err)
-        );
-    }
-
-    // Déclencheur au chargement Piwik
-    function applyConsentOnPiwikLoad() {
-        const consent = localStorage.getItem('gc-consent');
-        if (consent !== null) {
-            applyPiwikConsent(consent === 'accepted');
-        }
-    }
-
-    // Init complet
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initCookieBanner);
-    } else {
-        initCookieBanner();
-    }
 </script>
 
 <script type="module" src="/src/main.ts"></script>
