@@ -167,17 +167,15 @@ const toggleDetails = () => {
 <style scoped>
 .cookie-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  padding: 1.5rem;
 }
 
 .cookie-modal {
@@ -185,11 +183,15 @@ const toggleDetails = () => {
   border-radius: 20px;
   padding: 2.5rem;
   max-width: 500px;
-  width: 100%;
+  width: calc(100% - 2rem);
+  max-height: calc(100dvh - 2rem);
+  overflow-y: auto;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   text-align: center;
   animation: modal-appear 0.4s ease-out;
-  transition: max-width 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+  margin: 1rem auto;
 }
 
 .modal-detailed {
@@ -366,17 +368,44 @@ button {
   background: #c8e6c9;
 }
 
+@media (max-width: 640px) {
+  .cookie-modal {
+    padding: 1.5rem;
+    border-radius: 16px;
+    width: calc(100% - 2rem);
+    margin: 0.5rem 2rem;
+  }
+
+  .cookie-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+  }
+
+  .cookie-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .cookie-content p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .actions {
+    gap: 0.5rem;
+  }
+
+  button {
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
 @media (min-width: 640px) {
   .actions {
     flex-direction: row;
     justify-content: center;
     gap: 1rem;
-  }
-  
-  .actions template {
-    display: flex;
-    gap: 1rem;
-    width: 100%;
   }
 
   button {
