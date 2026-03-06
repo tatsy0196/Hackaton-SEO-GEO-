@@ -60,9 +60,9 @@ onMounted(() => {
           </div>
           <h2>2. Hébergement</h2>
           <div class="section-content">
-            <p><strong>Hébergeur :</strong> Vercel Inc.</p>
-            <p><strong>Adresse :</strong> 440 N Barranca Ave #4133, Covina, CA 91723, USA</p>
-            <p><strong>Site web :</strong> <a href="https://vercel.com" target="_blank" rel="noopener">https://vercel.com</a></p>
+            <p><strong>Hébergeur :</strong> O2switch</p>
+            <p><strong>Adresse :</strong> Chemin des Pardiaux, 63000 Clermont-Ferrand, France</p>
+            <p><strong>Site web :</strong> <a href="https://www.o2switch.fr" target="_blank" rel="noopener">https://www.o2switch.fr</a></p>
           </div>
         </section>
 
@@ -138,7 +138,7 @@ onMounted(() => {
             <h3>5.1 Types de cookies utilisés</h3>
             <ul>
               <li><strong>Cookies essentiels :</strong> Nécessaires au fonctionnement du site (panier, authentification)</li>
-              <li><strong>Cookies analytiques :</strong> Pour comprendre comment vous utilisez notre site</li>
+              <li><strong>Cookies analytiques :</strong> Pour comprendre comment vous utilisez notre site (utilisation des outils PIWIK Pro et Ahrefs)</li>
               <li><strong>Cookies de préférence :</strong> Pour mémoriser vos choix et préférences</li>
             </ul>
             
@@ -196,6 +196,90 @@ onMounted(() => {
           </div>
         </section>
 
+        <!-- Médiation de la consommation -->
+        <section class="legal-section">
+          <div class="section-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 8v4"></path>
+              <path d="M12 16h.01"></path>
+            </svg>
+          </div>
+          <h2>9. Médiation de la consommation</h2>
+          <div class="section-content">
+            <p>Conformément aux articles L.612-1 et suivants du Code de la consommation, en cas de litige, vous avez le droit de recourir gratuitement à un médiateur de la consommation en vue de la résolution amiable du litige qui vous opposerait à GreenNoble SAS.</p>
+            <p>Vous pouvez contacter le médiateur désigné par GreenNoble SAS :</p>
+            <p><strong>Médiateur :</strong> MCP Médiation</p>
+            <p><strong>Adresse :</strong> 12 square Desnouettes, 75015 Paris, France</p>
+            <p><strong>Site web :</strong> <a href="https://mcpmediation.org" target="_blank" rel="noopener">https://mcpmediation.org</a></p>
+          </div>
+        </section>
+
+        <!-- Règlement en Ligne des Litiges -->
+        <section class="legal-section">
+          <div class="section-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h2>10. Règlement en Ligne des Litiges (RLL)</h2>
+          <div class="section-content">
+            <p>La Commission Européenne met à disposition une plateforme de règlement en ligne des litiges (RLL) pour les consommateurs et les professionnels de l'Union Européenne.</p>
+            <p>Vous pouvez y accéder via le lien suivant : <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">Plateforme RLL de la Commission Européenne</a></p>
+          </div>
+        </section>
+
+        <!-- Fonctionnement Marketplace -->
+        <section class="legal-section">
+          <div class="section-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
+              <path d="M3 6h18"></path>
+              <path d="M16 10a4 4 0 0 1-8 0"></path>
+            </svg>
+          </div>
+          <h2>11. Modalités de référencement, classement et déréférencement</h2>
+          <div class="section-content">
+            <p>En tant qu'opérateur de plateforme en ligne, GreenNoble SAS met en relation des vendeurs tiers (producteurs locaux) avec des acheteurs.</p>
+            
+            <h3>11.1 Référencement des vendeurs</h3>
+            <p>Les vendeurs sont sélectionnés selon des critères stricts de proximité géographique (Isère et départements limitrophes) et de pratiques écoresponsables (agriculture biologique, circuits courts, réduction des emballages).</p>
+            
+            <h3>11.2 Classement des offres</h3>
+            <p>Par défaut, les offres sur la marketplace sont classées selon les critères suivants :</p>
+            <ul>
+              <li><strong>Pertinence :</strong> Adéquation entre la recherche et les caractéristiques du produit.</li>
+              <li><strong>Proximité :</strong> Distance géographique entre le vendeur et l'acheteur (pour favoriser le circuit court).</li>
+              <li><strong>Nouveauté :</strong> Mise en avant des produits saisonniers et nouveaux arrivants.</li>
+            </ul>
+            
+            <h3>11.3 Déréférencement</h3>
+            <p>GreenNoble SAS se réserve le droit de déréférencer un vendeur ou une offre en cas de non-respect de la charte de qualité GreenNoble, de manquements graves aux obligations contractuelles ou de signalements répétés d'acheteurs restés sans réponse.</p>
+          </div>
+        </section>
+
+        <!-- Avis en ligne -->
+        <section class="legal-section">
+          <div class="section-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <path d="M12 7l1.5 3 3.5.5-2.5 2.5 1 3.5-3.5-2-3.5 2 1-3.5L7 10.5l3.5-.5z"></path>
+            </svg>
+          </div>
+          <h2>12. Gestion des avis en ligne</h2>
+          <div class="section-content">
+            <p>Les avis publiés sur GreenNoble permettent aux clients de partager leur expérience. Voici les modalités de contrôle :</p>
+            <ul>
+              <li><strong>Authenticité :</strong> Seuls les clients ayant effectivement acheté un produit peuvent laisser un avis (avis vérifiés).</li>
+              <li><strong>Contrôle :</strong> Les avis font l'objet d'une modération a posteriori pour éviter tout contenu illicite, insultant ou inapproprié.</li>
+              <li><strong>Délai :</strong> Les avis sont publiés sans délai après modération.</li>
+              <li><strong>Contrepartie :</strong> Aucune contrepartie n'est fournie en échange du dépôt d'un avis.</li>
+            </ul>
+          </div>
+        </section>
+
         <!-- Contact -->
         <section class="legal-section contact-section">
           <div class="section-icon">
@@ -204,7 +288,7 @@ onMounted(() => {
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
           </div>
-          <h2>9. Contact</h2>
+          <h2>13. Contact</h2>
           <div class="section-content">
             <p>Pour toute question concernant ces mentions légales, vous pouvez nous contacter :</p>
             <div class="contact-methods">
